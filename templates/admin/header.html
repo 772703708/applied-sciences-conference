@@ -1,0 +1,54 @@
+<div class="admin-header">
+    <div class="header-search">
+        <div class="search-input">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="بحث في لوحة التحكم..." id="globalSearch">
+        </div>
+    </div>
+    
+    <div class="header-actions">
+        <div class="notification-icon">
+            <img src="{{ url_for('static', filename='images/icon/Notification.png') }}" alt="إشعارات">
+            <span class="notification-badge" id="notificationCount">3</span>
+        </div>
+        
+        <div class="settings-icon">
+            <i class="fas fa-cog fa-lg"></i>
+        </div>
+        
+        <div class="profile-dropdown" data-bs-toggle="dropdown">
+            <div class="profile-name">
+                مرحباً، {{ current_user.username }}
+            </div>
+            <img src="{{ url_for('static', filename='images/icon/Profile 1.png') }}" alt="الملف الشخصي">
+        </div>
+        
+        <div class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item" href="{{ url_for('auth.profile') }}">
+                <i class="fas fa-id-card"></i> الملف الشخصي
+            </a>
+            <a class="dropdown-item" href="{{ url_for('admin.settings') }}">
+                <i class="fas fa-cog"></i> الإعدادات
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+            </a>
+        </div>
+    </div>
+    
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn d-lg-none" onclick="document.querySelector('.admin-sidebar').classList.add('mobile-open')">
+        <i class="fas fa-bars"></i>
+    </button>
+</div>
+
+<style>
+.mobile-menu-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1a4a6e;
+    cursor: pointer;
+}
+</style>

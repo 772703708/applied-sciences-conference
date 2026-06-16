@@ -1,0 +1,536 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}رسائل الاتصال - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .page-header h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: #1a4a6e;
+    }
+    .filter-bar {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filter-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+    }
+    .search-input {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        width: 250px;
+    }
+    .btn-reset {
+        background: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-reset:hover {
+        background: #5a6268;
+    }
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        overflow-x: auto;
+    }
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+    }
+    .custom-table th {
+        text-align: right;
+        padding: 12px 10px;
+        background: #f8f9fa;
+        color: #1a4a6e;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .custom-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+        vertical-align: middle;
+    }
+    .custom-table tr:hover {
+        background: #f8f9fa;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+    }
+    .status-read {
+        background: #22c55e;
+        color: white;
+    }
+    .status-unread {
+        background: #ef4444;
+        color: white;
+    }
+    .btn-action {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px 8px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    .btn-view {
+        color: #c9a03d;
+    }
+    .btn-view:hover {
+        background: rgba(201, 160, 61, 0.1);
+    }
+    .btn-delete {
+        color: #dc2626;
+    }
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.1);
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1100;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .modal-header h3 {
+        margin: 0;
+        color: #1a4a6e;
+    }
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+    .message-detail {
+        margin-bottom: 20px;
+    }
+    .message-detail .label {
+        font-weight: 600;
+        color: #1a4a6e;
+        margin-bottom: 5px;
+        font-size: 0.8rem;
+    }
+    .message-detail .value {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        line-height: 1.6;
+    }
+    .message-detail .value p {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+    .reply-section {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+    .reply-section textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-family: 'Cairo', sans-serif;
+        resize: vertical;
+        min-height: 100px;
+    }
+    .reply-section textarea:focus {
+        outline: none;
+        border-color: #c9a03d;
+    }
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .btn-save {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .btn-reply {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .btn-reply:hover {
+        background: #2563eb;
+    }
+    @media (max-width: 768px) {
+        .custom-table {
+            font-size: 0.7rem;
+        }
+        .custom-table th, .custom-table td {
+            padding: 6px;
+        }
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .filter-group {
+            justify-content: space-between;
+        }
+        .search-input {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <h2><i class="fas fa-envelope"></i> رسائل الاتصال</h2>
+</div>
+
+<div class="filter-bar">
+    <div class="filter-group">
+        <select id="readFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all">جميع الرسائل</option>
+            <option value="read">مقروءة</option>
+            <option value="unread">غير مقروءة</option>
+        </select>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث بالاسم أو البريد أو الموضوع..." onkeyup="applyFilters()">
+        <button class="btn-reset" onclick="resetFilters()">إعادة تعيين</button>
+    </div>
+</div>
+
+<div class="table-card">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الاسم</th>
+                <th>البريد الإلكتروني</th>
+                <th>الموضوع</th>
+                <th>التاريخ</th>
+                <th>الحالة</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="contactsTableBody">
+            {% for contact in contacts %}
+            <tr data-contact-id="{{ contact.id }}" class="{% if not contact.is_read %}unread-row{% endif %}">
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ contact.name }}</strong></td>
+                <td dir="ltr">{{ contact.email }}</td>
+                <td>{{ contact.subject[:40] }}{% if contact.subject|length > 40 %}...{% endif %}</td>
+                <td dir="ltr">{{ contact.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <span class="status-badge status-{{ 'read' if contact.is_read else 'unread' }}">
+                        {{ 'مقروءة' if contact.is_read else 'غير مقروءة' }}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn-action btn-view" onclick="viewContact({{ contact.id }}, {{ contact.name|tojson }}, {{ contact.email|tojson }}, {{ contact.phone|tojson }}, {{ contact.subject|tojson }}, {{ contact.message|tojson }}, {{ contact.created_at.strftime('%Y-%m-%d %H:%M')|tojson }}, {{ contact.is_read|tojson }})" title="عرض التفاصيل">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-action btn-delete" onclick="deleteContact({{ contact.id }}, {{ contact.name|tojson }})" title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+             </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">لا توجد رسائل بعد</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- View Contact Modal -->
+<div id="viewModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>تفاصيل الرسالة</h3>
+            <button class="close-modal" onclick="closeViewModal()">&times;</button>
+        </div>
+        
+        <div class="message-detail">
+            <div class="label">الاسم</div>
+            <div class="value" id="viewName"></div>
+        </div>
+        
+        <div class="message-detail">
+            <div class="label">البريد الإلكتروني</div>
+            <div class="value" id="viewEmail"></div>
+        </div>
+        
+        <div class="message-detail">
+            <div class="label">رقم الجوال</div>
+            <div class="value" id="viewPhone"></div>
+        </div>
+        
+        <div class="message-detail">
+            <div class="label">الموضوع</div>
+            <div class="value" id="viewSubject"></div>
+        </div>
+        
+        <div class="message-detail">
+            <div class="label">تاريخ الإرسال</div>
+            <div class="value" id="viewDate"></div>
+        </div>
+        
+        <div class="message-detail">
+            <div class="label">الرسالة</div>
+            <div class="value"><p id="viewMessage"></p></div>
+        </div>
+        
+        <div class="reply-section">
+            <div class="label">الرد على المرسل</div>
+            <textarea id="replyMessage" placeholder="اكتب ردك هنا..."></textarea>
+        </div>
+        
+        <div class="modal-buttons">
+            <button class="btn-reply" onclick="sendReply()">
+                <i class="fas fa-paper-plane"></i> إرسال الرد
+            </button>
+            <button class="btn-cancel" onclick="closeViewModal()">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف رسالة <strong id="deleteContactName"></strong>؟</p>
+        <p style="font-size: 0.8rem; color: #666;">سيتم حذف الرسالة بشكل نهائي.</p>
+        <div class="modal-buttons">
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-save" style="background: #dc2626;">نعم، حذف</button>
+            </form>
+            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var currentContactId = null;
+    var currentContactEmail = null;
+    var currentContactName = null;
+    
+    function applyFilters() {
+        var readStatus = document.getElementById('readFilter').value;
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('#contactsTableBody tr');
+        
+        rows.forEach(function(row) {
+            if (row.querySelector('td:nth-child(1)')?.innerText === 'لا توجد رسائل بعد') return;
+            
+            var name = (row.querySelector('td:nth-child(2)')?.innerText || '').toLowerCase();
+            var email = (row.querySelector('td:nth-child(3)')?.innerText || '').toLowerCase();
+            var subject = (row.querySelector('td:nth-child(4)')?.innerText || '').toLowerCase();
+            var statusText = row.querySelector('td:nth-child(6)')?.innerText || '';
+            
+            var matchesSearch = name.includes(search) || email.includes(search) || subject.includes(search);
+            var matchesStatus = (readStatus === 'all') ||
+                (readStatus === 'read' && statusText.includes('مقروءة')) ||
+                (readStatus === 'unread' && statusText.includes('غير مقروءة'));
+            
+            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+        });
+    }
+    
+    function resetFilters() {
+        document.getElementById('readFilter').value = 'all';
+        document.getElementById('searchInput').value = '';
+        applyFilters();
+    }
+    
+    function viewContact(id, name, email, phone, subject, message, date, isRead) {
+        currentContactId = id;
+        currentContactEmail = email;
+        currentContactName = name;
+        
+        document.getElementById('viewName').innerHTML = name;
+        document.getElementById('viewEmail').innerHTML = '<a href="mailto:' + email + '">' + email + '</a>';
+        document.getElementById('viewPhone').innerHTML = phone || 'غير متوفر';
+        document.getElementById('viewSubject').innerHTML = subject;
+        document.getElementById('viewDate').innerHTML = date;
+        document.getElementById('viewMessage').innerHTML = message.replace(/\n/g, '<br>');
+        document.getElementById('replyMessage').value = '';
+        
+        // Mark as read if not already
+        if (!isRead) {
+            fetch("{{ url_for('admin.mark_contact_read', contact_id=0) }}".replace('0', id), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                }
+            }).then(function() {
+                // Update UI
+                var row = document.querySelector('tr[data-contact-id="' + id + '"]');
+                if (row) {
+                    var statusCell = row.querySelector('td:nth-child(6)');
+                    if (statusCell) {
+                        statusCell.innerHTML = '<span class="status-badge status-read">مقروءة</span>';
+                        row.classList.remove('unread-row');
+                    }
+                }
+            });
+        }
+        
+        document.getElementById('viewModal').style.display = 'flex';
+    }
+    
+    function closeViewModal() {
+        document.getElementById('viewModal').style.display = 'none';
+    }
+    
+    function sendReply() {
+        var replyText = document.getElementById('replyMessage').value.trim();
+        
+        if (!replyText) {
+            alert('الرجاء كتابة الرد قبل الإرسال');
+            return;
+        }
+        
+        if (!currentContactEmail) {
+            alert('لا يمكن إرسال الرد، البريد الإلكتروني غير متوفر');
+            return;
+        }
+        
+        fetch("{{ url_for('admin.reply_contact', contact_id=0) }}".replace('0', currentContactId), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+            },
+            body: JSON.stringify({
+                reply: replyText,
+                email: currentContactEmail,
+                name: currentContactName
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.success) {
+                alert('تم إرسال الرد بنجاح');
+                document.getElementById('replyMessage').value = '';
+                closeViewModal();
+            } else {
+                alert('حدث خطأ: ' + (data.error || 'فشل إرسال الرد'));
+            }
+        })
+        .catch(function(error) {
+            alert('حدث خطأ في الاتصال بالخادم');
+        });
+    }
+    
+    function deleteContact(id, name) {
+        document.getElementById('deleteContactName').innerHTML = name;
+        var form = document.getElementById('deleteForm');
+        form.action = "{{ url_for('admin.delete_contact', contact_id=0) }}".replace('0', id);
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+    
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        var viewModal = document.getElementById('viewModal');
+        var deleteModal = document.getElementById('deleteModal');
+        if (event.target === viewModal) closeViewModal();
+        if (event.target === deleteModal) closeDeleteModal();
+    }
+    
+    // Auto hide flash messages
+    setTimeout(function() {
+        var flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(function(msg) {
+            msg.style.transition = '0.5s';
+            msg.style.opacity = '0';
+            setTimeout(function() { msg.remove(); }, 500);
+        });
+    }, 4000);
+</script>
+{% endblock %}

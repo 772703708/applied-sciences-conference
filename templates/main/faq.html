@@ -1,0 +1,501 @@
+{% extends "base.html" %}
+
+{% block title %}الأسئلة الشائعة - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    
+</section>
+
+<!-- FAQ Section -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>الأسئلة الشائعة</h2>
+            <p class="lead">أهم الأسئلة التي قد تتبادر إلى ذهنك حول المؤتمر</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- General Questions -->
+            <div class="col-12" data-aos="fade-up">
+                <div class="faq-category">
+                    <div class="category-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>أسئلة عامة عن المؤتمر</h3>
+                </div>
+
+                <div class="accordion" id="generalFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
+                                ما هو موعد انعقاد المؤتمر؟
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#generalFaq">
+                            <div class="accordion-body">
+                                <p>سينعقد المؤتمر العلمي الدولي الأول لكلية العلوم التطبيقية خلال الفترة <strong>27-29
+                                        يوليو 2026م</strong>، وذلك لمدة ثلاثة أيام متتالية، حيث سيتم تخصيص اليوم الأول
+                                    للجلسات الافتتاحية والعلمية، واليومين الثاني والثالث للجلسات المتخصصة وورش العمل
+                                    المصاحبة.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+                                أين سيعقد المؤتمر؟
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#generalFaq">
+                            <div class="accordion-body">
+                                <p>سيعقد المؤتمر في <strong>كلية العلوم التطبيقية - جامعة ذمار</strong>، وسيتم تخصيص
+                                    القاعات الرئيسية والفرعية وفق البرنامج العلمي للمؤتمر. سيتم الإعلان عن أرقام القاعات
+                                    وتفاصيلها لاحقاً عبر الموقع الإلكتروني والتواصل المباشر مع المشاركين.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+                                ما هي لغة المؤتمر الرسمية؟
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#generalFaq">
+                            <div class="accordion-body">
+                                <p>اللغات الرسمية للمؤتمر هي <strong>اللغة العربية واللغة الإنجليزية</strong>. يمكن
+                                    تقديم الأبحاث العلمية باللغتين، مع ضرورة تقديم عنوان وملخص باللغة الإنجليزية للأبحاث
+                                    المقدمة بالعربية. سيتم توفير خدمة الترجمة الفورية للجلسات الرئيسية، مع تخصيص قاعات
+                                    للجلسات الثنائية اللغة لتسهيل التواصل بين المشاركين من مختلف الدول.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq4">
+                                ما هي الجهة المنظمة للمؤتمر؟
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#generalFaq">
+                            <div class="accordion-body">
+                                <p>ينظم المؤتمر <strong>كلية العلوم التطبيقية بجامعة ذمار</strong>، بالتعاون مع عدد من
+                                    المؤسسات الأكاديمية والبحثية المحلية والدولية. تهدف الكلية من خلال هذا المؤتمر إلى
+                                    تعزيز التعاون العلمي وتبادل الخبرات بين الباحثين والمتخصصين في مجالات العلوم
+                                    التطبيقية.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submission Questions -->
+            <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+                <div class="faq-category">
+                    <div class="category-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>تقديم الأبحاث العلمية</h3>
+                </div>
+
+                <div class="accordion" id="submissionFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#sub1">
+                                ما هو آخر موعد لتقديم الأبحاث؟
+                            </button>
+                        </h2>
+                        <div id="sub1" class="accordion-collapse collapse" data-bs-parent="#submissionFaq">
+                            <div class="accordion-body">
+                                <p>آخر موعد لاستقبال ملخصات الأبحاث هو <strong>15 أبريل 2026م</strong>، بينما آخر موعد
+                                    لتقديم الأبحاث كاملة هو <strong>1 مايو 2026م</strong>. سيتم إغلاق بوابة التقديم
+                                    الإلكتروني في تمام الساعة 11:59 مساءً بتوقيت اليمن في هذه التواريخ، ولن يتم قبول أي
+                                    أبحاث بعد انتهاء المهلة المحددة.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#sub2">
+                                ما هي متطلبات تنسيق البحث؟
+                            </button>
+                        </h2>
+                        <div id="sub2" class="accordion-collapse collapse" data-bs-parent="#submissionFaq">
+                            <div class="accordion-body">
+                                <p>يجب أن تلتزم الأبحاث بالمتطلبات التالية:</p>
+                                <ul>
+                                    <li>صيغة الملف: PDF</li>
+                                    <li>الحد الأقصى لحجم الملف: 10 ميجابايت</li>
+                                    <li>عدد صفحات البحث: بين 6-12 صفحة</li>
+                                    <li>الخط: Traditional Arabic للمحتوى العربي، Times New Roman للمحتوى الإنجليزي</li>
+                                    <li>يجب أن يتضمن البحث: عنوان، ملخص، كلمات مفتاحية، مقدمة، منهجية، نتائج، مناقشة،
+                                        استنتاجات، مراجع</li>
+                                </ul>
+                                <p>يمكن تحميل نموذج التنسيق الكامل من صفحة تقديم الأبحاث على الموقع الإلكتروني.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#sub3">
+                                هل سيتم تحكيم الأبحاث المقدمة؟
+                            </button>
+                        </h2>
+                        <div id="sub3" class="accordion-collapse collapse" data-bs-parent="#submissionFaq">
+                            <div class="accordion-body">
+                                <p>نعم، تخضع جميع الأبحاث المقدمة لعملية تحكيم علمي دقيق من قبل لجنة علمية متخصصة تضم
+                                    نخبة من الأساتذة والباحثين المتميزين. تعتمد عملية التحكيم على معايير الجودة العلمية
+                                    العالمية، وتتم بسرية تامة (Double-Blind Review)، حيث يتم إخفاء هوية المؤلفين عن
+                                    المحكمين والعكس.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#sub4">
+                                كيف يتم إخطار الباحثين بقبول أبحاثهم؟
+                            </button>
+                        </h2>
+                        <div id="sub4" class="accordion-collapse collapse" data-bs-parent="#submissionFaq">
+                            <div class="accordion-body">
+                                <p>سيتم إخطار الباحثين بنتائج التحكيم عبر البريد الإلكتروني المسجل في نموذج التقديم خلال
+                                    مدة أقصاها 4 أسابيع من تاريخ استلام البحث. يمكن للباحثين أيضاً متابعة حالة أبحاثهم
+                                    من خلال خدمة "تتبع البحث" المتاحة على الموقع الإلكتروني باستخدام رقم التتبع المرسل
+                                    عند تقديم البحث.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#sub5">
+                                هل سيتم نشر الأبحاث المقبولة؟
+                            </button>
+                        </h2>
+                        <div id="sub5" class="accordion-collapse collapse" data-bs-parent="#submissionFaq">
+                            <div class="accordion-body">
+                                <p>سيتم نشر الأبحاث المقبولة في <strong>مجلة كلية العلوم التطبيقية المحكمة</strong>، كما
+                                    سيتم إتاحتها على منصة المؤتمر الإلكترونية. سيتم أيضاً تزويد الباحثين بشهادات مشاركة
+                                    موثقة، مع إمكانية ترشيح الأبحاث المتميزة للنشر في مجلات علمية دولية مصنفة ضمن
+                                    مستوعبات Scopus و Web of Science.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Questions -->
+            <div class="col-12" data-aos="fade-up" data-aos-delay="200">
+                <div class="faq-category">
+                    <div class="category-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3>التسجيل والمشاركة في المؤتمر</h3>
+                </div>
+
+                <div class="accordion" id="registrationFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#reg1">
+                                هل يمكن حضور المؤتمر دون تقديم بحث؟
+                            </button>
+                        </h2>
+                        <div id="reg1" class="accordion-collapse collapse" data-bs-parent="#registrationFaq">
+                            <div class="accordion-body">
+                                <p>نعم، يمكن التسجيل كحضور فقط (Attendee) دون تقديم بحث علمي. يحق للحضور متابعة الجلسات
+                                    العلمية، حضور ورش العمل المصاحبة، والاستفادة من المواد العلمية المقدمة، والحصول على
+                                    شهادة حضور موثقة. ندعو جميع المهتمين والمختصين في مجالات العلوم التطبيقية للتسجيل
+                                    والمشاركة.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#reg2">
+                                ما هي رسوم المشاركة في المؤتمر؟
+                            </button>
+                        </h2>
+                        <div id="reg2" class="accordion-collapse collapse" data-bs-parent="#registrationFaq">
+                            <div class="accordion-body">
+                                <p>سيتم الإعلان عن رسوم المشاركة قريباً. سيتم منح خصومات خاصة للفئات التالية:</p>
+                                <ul>
+                                    <li>الباحثون الشباب (أقل من 35 عاماً)</li>
+                                    <li>طلاب الدراسات العليا (الماجستير والدكتوراه)</li>
+                                    <li>المشاركون من الدول الأقل نمواً</li>
+                                    <li>أعضاء هيئة التدريس بجامعة ذمار</li>
+                                </ul>
+                                <p>تشمل رسوم المشاركة: الحقيبة التعريفية، المواد العلمية، الاستراحات، الوجبات، وشهادة
+                                    المشاركة.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#reg3">
+                                كيف يمكنني تسجيل الدخول إلى منصة المؤتمر؟
+                            </button>
+                        </h2>
+                        <div id="reg3" class="accordion-collapse collapse" data-bs-parent="#registrationFaq">
+                            <div class="accordion-body">
+                                <p>يمكنك إنشاء حساب جديد على المنصة من خلال صفحة "تسجيل جديد"، ثم استخدام بيانات الدخول
+                                    (البريد الإلكتروني وكلمة المرور) لتسجيل الدخول. بعد تسجيل الدخول، يمكنك تقديم
+                                    أبحاثك، تتبع حالتها، والتسجيل في فعاليات المؤتمر.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#reg4">
+                                هل هناك دعم مالي للمشاركين الدوليين؟
+                            </button>
+                        </h2>
+                        <div id="reg4" class="accordion-collapse collapse" data-bs-parent="#registrationFaq">
+                            <div class="accordion-body">
+                                <p>يتوفر عدد محدود من المنح والدعم المالي للمشاركين الدوليين المتميزين، بناءً على طلب
+                                    مسبق وتقييم اللجنة المنظمة. يشمل الدعم: إعفاء من رسوم التسجيل، والمساعدة في توفير
+                                    السكن (جزئياً أو كلياً). يُرجى التواصل مع اللجنة المنظمة عبر البريد الإلكتروني
+                                    للحصول على مزيد من المعلومات حول معايير وإجراءات التقديم على هذه المنح.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Questions -->
+            <div class="col-12" data-aos="fade-up" data-aos-delay="300">
+                <div class="faq-category">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>الأسئلة التقنية</h3>
+                </div>
+
+                <div class="accordion" id="technicalFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#tec1">
+                                ما هي متطلبات رفع ملفات الأبحاث؟
+                            </button>
+                        </h2>
+                        <div id="tec1" class="accordion-collapse collapse" data-bs-parent="#technicalFaq">
+                            <div class="accordion-body">
+                                <p>يتم رفع ملفات الأبحاث بصيغة PDF فقط، بحد أقصى 25 ميجابايت. يمكن أيضاً رفع الملفات
+                                    الإضافية الداعمة (جداول، صور، مستندات) بصيغ PDF، DOC، DOCX، JPG، PNG. في حال واجهتك
+                                    أي صعوبات تقنية، يرجى التواصل مع فريق الدعم الفني عبر البريد الإلكتروني أو نموذج
+                                    الاتصال.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#tec2">
+                                كيف يمكنني استعادة كلمة المرور المفقودة؟
+                            </button>
+                        </h2>
+                        <div id="tec2" class="accordion-collapse collapse" data-bs-parent="#technicalFaq">
+                            <div class="accordion-body">
+                                <p>يمكنك استعادة كلمة المرور باتباع الخطوات التالية:</p>
+                                <ol>
+                                    <li>انتقل إلى صفحة تسجيل الدخول</li>
+                                    <li>انقر على رابط "نسيت كلمة المرور؟"</li>
+                                    <li>أدخل بريدك الإلكتروني المسجل</li>
+                                    <li>ستتلقى بريداً إلكترونياً يحتوي على رابط إعادة تعيين كلمة المرور</li>
+                                    <li>اتبع التعليمات لإعادة تعيين كلمة المرور</li>
+                                </ol>
+                                <p>إذا لم تصلك الرسالة، تأكد من صحة البريد الإلكتروني ومن مجلد البريد العشوائي
+                                    (Spam/Junk).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#tec3">
+                                ما هي المتصفحات المدعومة للمنصة؟
+                            </button>
+                        </h2>
+                        <div id="tec3" class="accordion-collapse collapse" data-bs-parent="#technicalFaq">
+                            <div class="accordion-body">
+                                <p>تم تصميم المنصة ودعمها للعمل بكفاءة على أحدث إصدارات المتصفحات التالية:</p>
+                                <ul>
+                                    <li>Google Chrome (الإصدار 100+)</li>
+                                    <li>Mozilla Firefox (الإصدار 100+)</li>
+                                    <li>Microsoft Edge (الإصدار 100+)</li>
+                                    <li>Safari (الإصدار 15+)</li>
+                                </ul>
+                                <p>للاستخدام الأمثل، نوصي بتحديث متصفحك إلى أحدث إصدار وتمكين JavaScript وملفات تعريف
+                                    الارتباط (Cookies).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <div class="contact-cta text-center mt-5" data-aos="fade-up">
+            <h3>لم تجد إجابة لسؤالك؟</h3>
+            <p>تواصل معنا وسنكون سعداء بالإجابة على استفساراتكم العلمية والإدارية</p>
+            <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">اتصل بنا الآن</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        padding: 80px 0 60px;
+        margin-top: -1px;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a,
+    .breadcrumb-item {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--secondary-color);
+    }
+
+    .faq-category {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--secondary-color);
+    }
+
+    .category-icon {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .category-icon i {
+        font-size: 1.3rem;
+        color: var(--primary-dark);
+    }
+
+    .faq-category h3 {
+        margin: 0;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+
+    .accordion-item {
+        background: var(--bg-light);
+        border: none;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .accordion-header button {
+        background: var(--bg-light);
+        color: var(--text-color);
+        font-weight: 600;
+        padding: 18px 20px;
+        font-size: 1rem;
+    }
+
+    .accordion-header button:not(.collapsed) {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .accordion-header button:focus {
+        box-shadow: none;
+    }
+
+    .accordion-body {
+        background: var(--bg-light);
+        color: var(--text-light);
+        line-height: 1.7;
+        padding: 20px;
+    }
+
+    .accordion-body p {
+        margin-bottom: 10px;
+    }
+
+    .accordion-body ul,
+    .accordion-body ol {
+        padding-right: 20px;
+        margin: 10px 0;
+    }
+
+    .accordion-body li {
+        margin-bottom: 5px;
+    }
+
+    .contact-cta {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        padding: 40px;
+        border-radius: 20px;
+        color: white;
+    }
+
+    .contact-cta h3 {
+        color: white;
+        margin-bottom: 10px;
+    }
+
+    .contact-cta .btn-primary {
+        background: var(--secondary-color);
+        color: var(--primary-dark);
+        border: none;
+        margin-top: 15px;
+        padding: 10px 30px;
+    }
+
+    .contact-cta .btn-primary:hover {
+        background: var(--secondary-dark);
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

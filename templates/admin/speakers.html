@@ -1,0 +1,562 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}إدارة المتحدثين - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .page-header h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: #1a4a6e;
+    }
+    .btn-add {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-add:hover {
+        background: #a8822a;
+        transform: translateY(-2px);
+    }
+    .filter-bar {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filter-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+    }
+    .search-input {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        width: 250px;
+    }
+    .btn-reset {
+        background: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-reset:hover {
+        background: #5a6268;
+    }
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        overflow-x: auto;
+    }
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+    }
+    .custom-table th {
+        text-align: right;
+        padding: 12px 10px;
+        background: #f8f9fa;
+        color: #1a4a6e;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .custom-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+        vertical-align: middle;
+    }
+    .custom-table tr:hover {
+        background: #f8f9fa;
+    }
+    .speaker-photo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #f0f0f0;
+    }
+    .keynote-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        background: #c9a03d;
+        color: white;
+    }
+    .btn-action {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px 8px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    .btn-edit {
+        color: #c9a03d;
+    }
+    .btn-edit:hover {
+        background: rgba(201, 160, 61, 0.1);
+    }
+    .btn-delete {
+        color: #dc2626;
+    }
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.1);
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1100;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .modal-header h3 {
+        margin: 0;
+        color: #1a4a6e;
+    }
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #333;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-family: 'Cairo', sans-serif;
+    }
+    .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #c9a03d;
+    }
+    .form-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .form-row .form-group {
+        flex: 1;
+        min-width: 150px;
+    }
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .btn-save {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .custom-table {
+            font-size: 0.7rem;
+        }
+        .custom-table th, .custom-table td {
+            padding: 6px;
+        }
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .filter-group {
+            justify-content: space-between;
+        }
+        .search-input {
+            width: 100%;
+        }
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <h2><i class="fas fa-microphone-alt"></i> إدارة المتحدثين</h2>
+    <button class="btn-add" onclick="openAddModal()">
+        <i class="fas fa-plus"></i> إضافة متحدث جديد
+    </button>
+</div>
+
+<div class="filter-bar">
+    <div class="filter-group">
+        <select id="keynoteFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all">جميع المتحدثين</option>
+            <option value="keynote">المتحدثون الرئيسيون</option>
+            <option value="regular">المتحدثون العاديون</option>
+        </select>
+        <select id="committeeFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all">جميع اللجان</option>
+            <option value="scientific">اللجنة العلمية</option>
+            <option value="preparatory">اللجنة التحضيرية</option>
+            <option value="organizing">اللجنة التنظيمية</option>
+            <option value="supervisory">اللجنة الإشرافية</option>
+        </select>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث بالاسم..." onkeyup="applyFilters()">
+        <button class="btn-reset" onclick="resetFilters()">إعادة تعيين</button>
+    </div>
+</div>
+
+<div class="table-card">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>الصورة</th>
+                <th>الاسم</th>
+                <th>المنصب</th>
+                <th>الجهة</th>
+                <th>اللجنة</th>
+                <th>متحدث رئيسي</th>
+                <th>الترتيب</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="speakersTableBody">
+            {% for speaker in speakers %}
+            <tr data-speaker-id="{{ speaker.id }}">
+                <td>
+                    {% if speaker.photo %}
+                    <img src="{{ url_for('static', filename='uploads/' + speaker.photo) }}" class="speaker-photo" alt="{{ speaker.name }}">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/icon/Profile 1.png') }}" class="speaker-photo" alt="{{ speaker.name }}">
+                    {% endif %}
+                </td>
+                <td><strong>{{ speaker.name }}</strong>{% if speaker.name_ar %} ({{ speaker.name_ar }}){% endif %}</td>
+                <td>{{ speaker.title or 'عضو لجنة' }}</td>
+                <td>{{ speaker.affiliation or 'جامعة ذمار' }}</td>
+                <td>
+                    {% if speaker.committee %}
+                    <span class="keynote-badge" style="background: #1a4a6e;">{{ speaker.committee }}</span>
+                    {% else %}
+                    <span class="keynote-badge" style="background: #6c757d;">لجنة</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if speaker.is_keynote %}
+                    <span class="keynote-badge">متحدث رئيسي</span>
+                    {% else %}
+                    <span class="keynote-badge" style="background: #6c757d;">عضو</span>
+                    {% endif %}
+                </td>
+                <td>{{ speaker.order }}</td>
+                <td>
+                    <button class="btn-action btn-edit" onclick='editSpeaker({{ speaker.id }}, {{ speaker.name|tojson }}, {{ speaker.name_ar|tojson }}, {{ speaker.title|tojson }}, {{ speaker.title_ar|tojson }}, {{ speaker.affiliation|tojson }}, {{ speaker.bio|tojson }}, {{ speaker.email|tojson }}, {{ speaker.linkedin|tojson }}, {{ speaker.twitter|tojson }}, {{ speaker.is_keynote|tojson }}, {{ speaker.order|tojson }})' title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action btn-delete" onclick="deleteSpeaker({{ speaker.id }}, {{ speaker.name|tojson }})" title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center">لا توجد متحدثين بعد، قم بإضافة متحدث جديد</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="speakerModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">إضافة متحدث جديد</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="speakerForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="speaker_id" id="speakerId" value="">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الاسم (بالعربية) <span style="color: red;">*</span></label>
+                    <input type="text" name="name" id="name" required placeholder="مثال: أ.د. نبيل العريق">
+                </div>
+                <div class="form-group">
+                    <label>الاسم (بالإنجليزية)</label>
+                    <input type="text" name="name_ar" id="nameAr" placeholder="Prof. Dr. Nabil Al-Areq">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>المنصب (بالعربية)</label>
+                    <input type="text" name="title" id="title" placeholder="رئيس اللجنة العلمية">
+                </div>
+                <div class="form-group">
+                    <label>المنصب (بالإنجليزية)</label>
+                    <input type="text" name="title_ar" id="titleAr" placeholder="Head of Scientific Committee">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الجهة / المؤسسة</label>
+                    <input type="text" name="affiliation" id="affiliation" placeholder="جامعة ذمار">
+                </div>
+                <div class="form-group">
+                    <label>اللجنة</label>
+                    <select name="committee" id="committee">
+                        <option value="">-- اختر اللجنة --</option>
+                        <option value="اللجنة العلمية">اللجنة العلمية</option>
+                        <option value="اللجنة التحضيرية">اللجنة التحضيرية</option>
+                        <option value="اللجنة التنظيمية">اللجنة التنظيمية</option>
+                        <option value="اللجنة الإشرافية">اللجنة الإشرافية</option>
+                        <option value="اللجنة الإعلامية">اللجنة الإعلامية</option>
+                        <option value="اللجنة المالية">اللجنة المالية</option>
+                        <option value="اللجنة الأمنية">اللجنة الأمنية</option>
+                        <option value="لجنة المتابعة والتنسيق">لجنة المتابعة والتنسيق</option>
+                        <option value="لجنة الاستقبال">لجنة الاستقبال</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>السيرة الذاتية</label>
+                <textarea name="bio" id="bio" rows="3" placeholder="نبذة عن المتحدث وخبراته العلمية"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" name="email" id="email" placeholder="example@tu.edu.ye">
+                </div>
+                <div class="form-group">
+                    <label>ترتيب العرض</label>
+                    <input type="number" name="order" id="order" value="0" placeholder="0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>LinkedIn</label>
+                    <input type="text" name="linkedin" id="linkedin" placeholder="رابط LinkedIn">
+                </div>
+                <div class="form-group">
+                    <label>Twitter</label>
+                    <input type="text" name="twitter" id="twitter" placeholder="رابط Twitter">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>الصورة الشخصية</label>
+                <input type="file" name="photo" id="photo" accept="image/*">
+                <small class="text-muted">jpg, png, jpeg, webp - الحد الأقصى 5 ميجابايت</small>
+            </div>
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_keynote" id="isKeynote">
+                    متحدث رئيسي (Keynote Speaker)
+                </label>
+            </div>
+            <div class="modal-buttons">
+                <button type="submit" class="btn-save">حفظ</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف المتحدث <strong id="deleteSpeakerName"></strong>؟</p>
+        <div class="modal-buttons">
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-save" style="background: #dc2626;">نعم، حذف</button>
+            </form>
+            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function applyFilters() {
+        var keynoteFilter = document.getElementById('keynoteFilter').value;
+        var committeeFilter = document.getElementById('committeeFilter').value;
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('#speakersTableBody tr');
+        
+        rows.forEach(function(row) {
+            var name = (row.querySelector('td:nth-child(2)')?.innerText || '').toLowerCase();
+            var committee = (row.querySelector('td:nth-child(5)')?.innerText || '').toLowerCase();
+            var isKeynote = row.querySelector('td:nth-child(6)')?.innerText || '';
+            
+            var matchesSearch = name.includes(search);
+            var matchesKeynote = (keynoteFilter === 'all') || 
+                (keynoteFilter === 'keynote' && isKeynote.includes('متحدث رئيسي')) ||
+                (keynoteFilter === 'regular' && !isKeynote.includes('متحدث رئيسي'));
+            var matchesCommittee = (committeeFilter === 'all') || committee.includes(committeeFilter);
+            
+            row.style.display = (matchesSearch && matchesKeynote && matchesCommittee) ? '' : 'none';
+        });
+    }
+    
+    function resetFilters() {
+        document.getElementById('keynoteFilter').value = 'all';
+        document.getElementById('committeeFilter').value = 'all';
+        document.getElementById('searchInput').value = '';
+        applyFilters();
+    }
+    
+    function openAddModal() {
+        document.getElementById('modalTitle').innerText = 'إضافة متحدث جديد';
+        document.getElementById('speakerId').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('nameAr').value = '';
+        document.getElementById('title').value = '';
+        document.getElementById('titleAr').value = '';
+        document.getElementById('affiliation').value = '';
+        document.getElementById('committee').value = '';
+        document.getElementById('bio').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('linkedin').value = '';
+        document.getElementById('twitter').value = '';
+        document.getElementById('order').value = '0';
+        document.getElementById('isKeynote').checked = false;
+        document.getElementById('photo').value = '';
+        document.getElementById('speakerForm').action = "{{ url_for('admin.add_speaker') }}";
+        document.getElementById('speakerModal').style.display = 'flex';
+    }
+    
+    function editSpeaker(id, name, nameAr, title, titleAr, affiliation, bio, email, linkedin, twitter, isKeynote, order) {
+        document.getElementById('modalTitle').innerText = 'تعديل بيانات المتحدث';
+        document.getElementById('speakerId').value = id;
+        document.getElementById('name').value = name;
+        document.getElementById('nameAr').value = nameAr || '';
+        document.getElementById('title').value = title || '';
+        document.getElementById('titleAr').value = titleAr || '';
+        document.getElementById('affiliation').value = affiliation || '';
+        document.getElementById('bio').value = bio || '';
+        document.getElementById('email').value = email || '';
+        document.getElementById('linkedin').value = linkedin || '';
+        document.getElementById('twitter').value = twitter || '';
+        document.getElementById('order').value = order || 0;
+        document.getElementById('isKeynote').checked = isKeynote === 'true' || isKeynote === true;
+        document.getElementById('speakerForm').action = "{{ url_for('admin.edit_speaker', speaker_id=0) }}".replace('0', id);
+        document.getElementById('speakerModal').style.display = 'flex';
+    }
+    
+    function closeModal() {
+        document.getElementById('speakerModal').style.display = 'none';
+    }
+    
+    function deleteSpeaker(id, name) {
+        document.getElementById('deleteSpeakerName').innerText = name;
+        var form = document.getElementById('deleteForm');
+        form.action = "{{ url_for('admin.delete_speaker', speaker_id=0) }}".replace('0', id);
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+    
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        var modal = document.getElementById('speakerModal');
+        var deleteModal = document.getElementById('deleteModal');
+        if (event.target === modal) closeModal();
+        if (event.target === deleteModal) closeDeleteModal();
+    }
+    
+    setTimeout(function() {
+        var flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(function(msg) {
+            msg.style.transition = '0.5s';
+            msg.style.opacity = '0';
+            setTimeout(function() { msg.remove(); }, 500);
+        });
+    }, 4000);
+</script>
+{% endblock %}

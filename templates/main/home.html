@@ -1,0 +1,788 @@
+{% extends "base.html" %}
+
+{% block title %}الرئيسية - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Black Overlay -->
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content" data-aos="fade-up">
+        <!-- Logo beside text -->
+        <div class="hero-logo-wrapper">
+            <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="شعار المؤتمر" class="hero-logo"> -->
+            <div class="hero-text-wrapper">
+                <div class="hero-badge">
+                    <i class="fas fa-trophy"></i> تحت رعاية كريمة من جامعة ذمار
+                </div>
+                <h1 class="hero-title">المؤتمر العلمي الدولي الأول</h1>
+                <h2 class="hero-subtitle">آفاق العلوم التطبيقية والتكنولوجيا في خدمة التنمية المستدامة</h2>
+            </div>
+        </div>
+        <div class="hero-date">
+            <div class="date-item">
+                <div class="green-pulse-large"></div>
+                <span><i class="fas fa-calendar-alt"></i> 27 - 29 يوليو 2026م</span>
+            </div>
+            <span><i class="fas fa-map-marker-alt"></i> كلية العلوم التطبيقية - جامعة ذمار</span>
+            <span><i class="fas fa-users"></i> 1200+ مشارك</span>
+        </div>
+        <div class="hero-buttons">
+            <a href="{{ url_for('submission.submit_paper') }}" class="btn btn-primary btn-large">
+                <i class="fas fa-upload"></i> تقديم بحث
+            </a>
+            <a href="{{ url_for('main.register_page') }}" class="btn btn-outline-primary btn-large">
+                <i class="fas fa-user-plus"></i> التسجيل الآن
+            </a>
+            <a href="{{ url_for('submission.track_paper') }}" class="btn btn-secondary btn-large">
+                <i class="fas fa-search"></i> تتبع البحث
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Countdown Timer -->
+<section class="countdown-section">
+    <div class="container">
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">يوم</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">ساعة</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">دقيقة</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">ثانية</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Strategic Objectives Section -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>الأهداف الاستراتيجية للمؤتمر</h2>
+            <p class="lead">رؤية علمية طموحة لخدمة قضايا التنمية الوطنية</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="objective-card">
+                    <div class="objective-icon">
+                        <i class="fas fa-graduation-cap" style="color: #3498db;"></i>
+                    </div>
+                    <h3>توظيف المعرفة</h3>
+                    <p>تحويل مخرجات البحث العلمي إلى تطبيقات ومشاريع عملية تخدم المجتمع وتسهم في التنمية المستدامة،
+                        وتعزيز نقل التقنية بين الأوساط الأكاديمية والصناعية.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="objective-card">
+                    <div class="objective-icon">
+                        <i class="fas fa-handshake" style="color: #2ecc71;"></i>
+                    </div>
+                    <h3>تعزيز الشراكة</h3>
+                    <p>بناء جسور تعاون فاعلة بين المؤسسات الأكاديمية والقطاع الخاص والمنظمات التنموية، لخلق بيئة محفزة
+                        للابتكار والإبداع التقني.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="objective-card">
+                    <div class="objective-icon">
+                        <i class="fas fa-microscope" style="color: #e74c3c;"></i>
+                    </div>
+                    <h3>استكشاف المواهب</h3>
+                    <p>إبراز قدرات الباحثين الشباب وطلبة الدراسات العليا، وتمكينهم من قيادة مسارات البحث العلمي، وتحفيز
+                        الابتكار والإبداع التقني لخدمة قضايا التنمية.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="objective-card">
+                    <div class="objective-icon">
+                        <i class="fas fa-chart-line" style="color: #f39c12;"></i>
+                    </div>
+                    <h3>تحديد الأولويات</h3>
+                    <p>الخروج بتوصيات علمية دقيقة تسهم في توجيه مسار البحث العلمي الوطني، ومعالجة القضايا التنموية
+                        الملحة وفق أولويات مدروسة.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Conference Tracks Preview -->
+<section class="section-padding section-bg">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>محاور المؤتمر الرئيسية</h2>
+            <p class="lead">ستة محاور علمية متخصصة تغطي أحدث المجالات التطبيقية والتقنيات الحديثة</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="track-card">
+                    <div class="track-icon"><i class="fas fa-solar-panel"></i></div>
+                    <h3 class="track-title">المحور الأول: الطاقة المستدامة</h3>
+                    <p>بحوث متقدمة في مجالات الطاقة المتجددة، الخلايا الشمسية عالية الكفاءة، الطاقة النووية السلمية،
+                        الهيدروجين الأخضر، الشبكات الذكية، وأنظمة تخزين الطاقة المتطورة.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="track-card">
+                    <div class="track-icon"><i class="fas fa-microscope"></i></div>
+                    <h3 class="track-title">المحور الثاني: علم المواد المتقدمة</h3>
+                    <p>دراسات في تكنولوجيا النانو، المواد الوظيفية الذكية، البوليمرات الحيوية، المواد النانوية للتطبيقات
+                        الطبية والصناعية، والمواد المتقدمة لتطبيقات الطاقة والإلكترونيات.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="track-card">
+                    <div class="track-icon"><i class="fas fa-dna"></i></div>
+                    <h3 class="track-title">المحور الثالث: العلوم البيولوجية</h3>
+                    <p>أبحاث متخصصة في الأحياء الدقيقة، الهندسة الوراثية، المعلوماتية الحيوية، النباتات الطبية، مقاومة
+                        المضادات الحيوية، والتطبيقات التكنولوجية الحيوية في الطب والزراعة.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="track-card">
+                    <div class="track-icon"><i class="fas fa-water"></i></div>
+                    <h3 class="track-title">المحور الرابع: الجيولوجيا والبيئة</h3>
+                    <p>دراسات متكاملة في الأمن المائي، حصاد المياه، التغيرات المناخية وآثارها، المخاطر الجيولوجية،
+                        والتدهور البيئي وسبل معالجته.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="track-card">
+                    <div class="track-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="track-title">المحور الخامس: الإحصاء والنمذجة</h3>
+                    <p>تطبيقات متقدمة في النمذجة الرياضية والتنبؤ الاقتصادي، الإحصاء التطبيقي لتحليل المخاطر، بحوث
+                        العمليات، الذكاء الاصطناعي، والأمن السيبراني.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="track-card">
+                    <div class="track-icon"><i class="fas fa-flask"></i></div>
+                    <h3 class="track-title">المحور السادس: الكيمياء التطبيقية</h3>
+                    <p>أبحاث في كيمياء المواد المتقدمة، تكنولوجيا الهيدروجين الأخضر، البوليمرات الحيوية المستدامة،
+                        الكيمياء البيئية، والتطبيقات الصناعية والطبية للكيمياء.</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="{{ url_for('main.tracks') }}" class="btn btn-primary">استعراض جميع المحاور <i
+                    class="fas fa-arrow-left"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Target Audience Section - الفئات المستهدفة -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>الفئات المستهدفة</h2>
+            <p class="lead">من هم المشاركون في هذا الحدث العلمي الكبير؟</p>
+            <p class="sub-lead">تجمع نوعي يجمع نخبة الباحثين والأكاديميين والمتخصصين من مختلف القطاعات</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>الباحثون والأكاديميون</h3>
+                    <p>أعضاء هيئة التدريس والباحثون في الجامعات والمراكز البحثية المتخصصة من مختلف التخصصات العلمية
+                        والتطبيقية.</p>
+                    <div class="audience-stats">
+                        <span>300+ باحث</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-chalkboard-user"></i>
+                    </div>
+                    <h3>طلاب الدراسات العليا</h3>
+                    <p>طلاب الماجستير والدكتوراه من مختلف الجامعات اليمنية والعربية، لعرض أبحاثهم واكتساب خبرات جديدة.
+                    </p>
+                    <div class="audience-stats">
+                        <span>500+ طالب</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3>القطاع الخاص والصناعي</h3>
+                    <p>رجال الأعمال والمستثمرون، والشركات الصناعية والتقنية، لاستكشاف فرص التعاون والاستثمار في
+                        الابتكارات العلمية.</p>
+                    <div class="audience-stats">
+                        <span>50+ شركة</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="audience-card">
+                    <div class="audience-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>صناع القرار والخبراء</h3>
+                    <p>المسؤولون في وزارات التعليم العالي والبحث العلمي، والمنظمات الدولية، والخبراء في مجالات التخطيط
+                        والتنمية.</p>
+                    <div class="audience-stats">
+                        <span>50+ خبير</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Expected Outcomes Section - المخرجات المتوقعة -->
+<section class="section-padding section-bg">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>المخرجات المتوقعة</h2>
+            <p class="lead">ما الذي سينتج عن هذا المؤتمر؟</p>
+            <p class="sub-lead">نتائج علمية ملموسة تعزز مسيرة البحث العلمي والتنمية المستدامة</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="outcome-card">
+                    <div class="outcome-number">01</div>
+                    <div class="outcome-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>حقيبة توصيات علمية محكمة</h3>
+                    <p>إعداد حقيبة متكاملة من التوصيات والرؤى المستقبلية المبنية على أسس علمية دقيقة، لتطوير البحث
+                        العلمي في اليمن، يتم رفعها للجهات المعنية لاتخاذ الإجراءات اللازمة.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="outcome-card">
+                    <div class="outcome-number">02</div>
+                    <div class="outcome-icon"><i class="fas fa-book-open"></i></div>
+                    <h3>أبحاث محكمة في مجلة علمية مرموقة</h3>
+                    <p>نشر الأبحاث المتميزة المقبولة في مجلة علمية محكمة خاصة بالمؤتمر، وإتاحتها في قواعد البيانات
+                        العلمية العالمية لتعزيز الوصول والمعرفة العلمية.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="outcome-card">
+                    <div class="outcome-number">03</div>
+                    <div class="outcome-icon"><i class="fas fa-network-wired"></i></div>
+                    <h3>شبكة تعاون علمي وبحثي مستدامة</h3>
+                    <p>تأسيس شبكة تعاون وثيقة بين الباحثين والمؤسسات الأكاديمية والصناعية، لضمان استمرارية التعاون
+                        وتبادل الخبرات بعد انتهاء فعاليات المؤتمر.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="section-padding cta-section">
+    <div class="container text-center" data-aos="fade-up">
+        <h2>انضم إلى كوكبة الباحثين المتميزين</h2>
+        <p class="lead mb-4">ساهم في إثراء المحتوى العلمي وشارك في تحقيق نقلة نوعية في مسار البحث العلمي في اليمن
+            والمنطقة</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('submission.submit_paper') }}" class="btn btn-light btn-large">
+                <i class="fas fa-upload"></i> تقديم البحث
+            </a>
+            <a href="{{ url_for('main.register_page') }}" class="btn btn-outline-light btn-large">
+                <i class="fas fa-user-plus"></i> التسجيل كحضور
+            </a>
+            <a href="{{ url_for('contact.contact') }}" class="btn btn-outline-light btn-large">
+                <i class="fas fa-headset"></i> استفسارات
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Countdown Timer - المؤتمر في 27 يوليو 2026
+    function updateCountdown() {
+        const conferenceDate = new Date(2026, 6, 27, 9, 0, 0);
+        const now = new Date();
+        const diff = conferenceDate - now;
+
+        if (diff <= 0) {
+            document.getElementById('days').textContent = '00';
+            document.getElementById('hours').textContent = '00';
+            document.getElementById('minutes').textContent = '00';
+            document.getElementById('seconds').textContent = '00';
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================
+   Hero Section with Logo
+   ======================================== */
+    .hero-logo-wrapper {
+        display: flex;
+        align-items: left;
+        justify-content: right;
+        gap: 25px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .hero-logo {
+        width: 150px;
+        height: 100px;
+        object-fit: contain;
+        background: white;
+        border-radius: 20px;
+        padding: 5px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-text-wrapper {
+        text-align: center;
+    }
+
+    /* ========================================
+   Hero Date with Green Pulsing Dot
+   ======================================== */
+    .hero-date {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin: 20px 0;
+    }
+
+    .date-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+    }
+
+    .green-pulse-large {
+        width: 14px;
+        height: 14px;
+        background-color: #22c55e;
+        border-radius: 50%;
+        position: relative;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        animation: pulse-large 1.8s infinite;
+    }
+
+    .green-pulse-large::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        background-color: #22c55e;
+        border-radius: 50%;
+        opacity: 0.5;
+        animation: pulse-ring-large 1.8s infinite;
+    }
+
+    @keyframes pulse-large {
+        0% {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 12px rgba(34, 197, 94, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+        }
+    }
+
+    @keyframes pulse-ring-large {
+        0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.5;
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scale(2);
+            opacity: 0;
+        }
+    }
+
+    /* ========================================
+   Countdown Section
+   ======================================== */
+    .countdown-section {
+        background: transparent;
+        padding: 30px 0 50px;
+        margin-top: -60px;
+        position: relative;
+        z-index: 3;
+    }
+
+    .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+
+    .countdown-item {
+        text-align: center;
+        background: rgba(26, 74, 110, 0.9);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 20px 25px;
+        min-width: 110px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .countdown-number {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: var(--secondary-color);
+        line-height: 1;
+    }
+
+    .countdown-label {
+        color: var(--text-white);
+        font-size: 0.85rem;
+        margin-top: 8px;
+    }
+
+    /* ========================================
+   Target Audience Cards
+   ======================================== */
+    .audience-card {
+        background: var(--bg-light);
+        border-radius: 20px;
+        padding: 35px 25px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .audience-card::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--secondary-color), transparent);
+        transition: all 0.3s ease;
+    }
+
+    .audience-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .audience-card:hover::before {
+        height: 6px;
+    }
+
+    .audience-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .audience-card:nth-child(1) .audience-icon i {
+        color: #3498db;
+    }
+
+    .audience-card:nth-child(2) .audience-icon i {
+        color: #2ecc71;
+    }
+
+    .audience-card:nth-child(3) .audience-icon i {
+        color: #e74c3c;
+    }
+
+    .audience-card:nth-child(4) .audience-icon i {
+        color: #f39c12;
+    }
+
+    .audience-card h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--primary-color);
+    }
+
+    .audience-card p {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .audience-stats {
+        display: inline-block;
+        background: rgba(201, 160, 61, 0.15);
+        padding: 6px 15px;
+        border-radius: 30px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--secondary-color);
+    }
+
+    /* ========================================
+   Enhanced Outcome Cards
+   ======================================== */
+    .outcome-card {
+        background: var(--bg-light);
+        border-radius: 24px;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .outcome-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .outcome-number {
+        font-size: 4rem;
+        font-weight: 800;
+        color: var(--secondary-color);
+        opacity: 0.12;
+        position: absolute;
+        top: 15px;
+        left: 20px;
+    }
+
+    .outcome-icon {
+        font-size: 2.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 20px;
+    }
+
+    .outcome-card h3 {
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+    }
+
+    .outcome-card p {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+    /* ========================================
+   CTA Section
+   ======================================== */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+    }
+
+    .cta-section h2 {
+        color: white;
+    }
+
+    .cta-section h2:after {
+        background: var(--secondary-color);
+    }
+
+    .cta-section .lead {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: transparent;
+        color: white;
+    }
+
+    .btn-outline-light:hover {
+        background: var(--secondary-color);
+        border-color: var(--secondary-color);
+        color: var(--primary-dark);
+    }
+
+    /* ========================================
+   Track Cards
+   ======================================== */
+    .track-card {
+        background: var(--bg-light);
+        padding: 25px;
+        border-radius: 16px;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-right: 4px solid;
+        text-align: center;
+    }
+
+    .track-card:nth-child(1) {
+        border-right-color: #3498db;
+    }
+
+    .track-card:nth-child(2) {
+        border-right-color: #2ecc71;
+    }
+
+    .track-card:nth-child(3) {
+        border-right-color: #e74c3c;
+    }
+
+    .track-card:nth-child(4) {
+        border-right-color: #f39c12;
+    }
+
+    .track-card:nth-child(5) {
+        border-right-color: #9b59b6;
+    }
+
+    .track-card:nth-child(6) {
+        border-right-color: #1abc9c;
+    }
+
+    .track-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .track-icon {
+        font-size: 2.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+    }
+
+    .track-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .track-card p {
+        color: var(--text-light);
+        font-size: 0.85rem;
+        line-height: 1.6;
+    }
+
+    /* ========================================
+   Responsive
+   ======================================== */
+    @media (max-width: 768px) {
+        .hero-logo {
+            width: 60px;
+            height: 60px;
+        }
+
+        .hero-logo-wrapper {
+            gap: 15px;
+        }
+
+        .countdown-item {
+            min-width: 80px;
+            padding: 15px;
+        }
+
+        .countdown-number {
+            font-size: 2rem;
+        }
+
+        .audience-card {
+            padding: 25px 20px;
+        }
+
+        .audience-icon {
+            font-size: 2.5rem;
+        }
+
+        .audience-card h3 {
+            font-size: 1.1rem;
+        }
+
+        .outcome-card {
+            padding: 30px 20px;
+        }
+
+        .outcome-number {
+            font-size: 3rem;
+        }
+
+        .green-pulse-large {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .hero-logo-wrapper {
+            flex-direction: column;
+        }
+
+        .countdown-item {
+            min-width: 70px;
+            padding: 10px;
+        }
+
+        .countdown-number {
+            font-size: 1.5rem;
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+        }
+
+        .audience-stats {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+        }
+
+        .hero-date {
+            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .green-pulse-large {
+            width: 10px;
+            height: 10px;
+        }
+    }
+</style>
+{% endblock %}

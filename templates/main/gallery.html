@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}معرض الصور - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+
+</section>
+
+<!-- Gallery Section -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>معرض الصور</h2>
+            <p class="lead">ألبوم صور فعاليات المؤتمر والأنشطة العلمية</p>
+        </div>
+
+        <!-- Gallery Filter -->
+        <div class="gallery-filter text-center mb-5" data-aos="fade-up">
+            <button class="filter-btn active" data-filter="all">الكل</button>
+            <button class="filter-btn" data-filter="conference">المؤتمر</button>
+            <button class="filter-btn" data-filter="workshop">ورش العمل</button>
+            <button class="filter-btn" data-filter="social">الفعاليات الاجتماعية</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="row g-4" id="galleryGrid">
+            <!-- Sample Gallery Items - سيتم جلبها من قاعدة البيانات -->
+            <div class="col-lg-4 col-md-6 gallery-item" data-category="conference" data-aos="fade-up"
+                data-aos-delay="100">
+                <div class="gallery-card">
+                    <img src="{{ url_for('static', filename='images/gallery/placeholder.jpg') }}" alt="صورة المؤتمر"
+                        class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>افتتاح المؤتمر</h4>
+                        <p>جلسة الافتتاح الرسمية للمؤتمر</p>
+                        <button class="btn-view" onclick="openModal(this)"><i class="fas fa-search-plus"></i>
+                            معاينة</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 gallery-item" data-category="workshop" data-aos="fade-up"
+                data-aos-delay="200">
+                <div class="gallery-card">
+                    <img src="{{ url_for('static', filename='images/gallery/placeholder2.jpg') }}" alt="ورشة عمل"
+                        class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>ورشة عمل</h4>
+                        <p>ورشة العمل حول الطاقة المتجددة</p>
+                        <button class="btn-view" onclick="openModal(this)"><i class="fas fa-search-plus"></i>
+                            معاينة</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 gallery-item" data-category="social" data-aos="fade-up" data-aos-delay="300">
+                <div class="gallery-card">
+                    <img src="{{ url_for('static', filename='images/gallery/placeholder3.jpg') }}" alt="حفل ختامي"
+                        class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay">
+                        <h4>حفل ختامي</h4>
+                        <p>تكريم المشاركين والمتحدثين</p>
+                        <button class="btn-view" onclick="openModal(this)"><i class="fas fa-search-plus"></i>
+                            معاينة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-5" data-aos="fade-up">
+            <button class="btn btn-primary" id="loadMoreBtn">تحميل المزيد</button>
+        </div>
+    </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div id="imageModal" class="image-modal">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <div id="modalCaption"></div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gallery-filter {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 8px 25px;
+        border: 2px solid var(--secondary-color);
+        background: transparent;
+        color: var(--secondary-color);
+        border-radius: 30px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--secondary-color);
+        color: var(--primary-dark);
+    }
+
+    .gallery-card {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        cursor: pointer;
+        aspect-ratio: 1 / 0.8;
+    }
+
+    .gallery-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .gallery-card:hover .gallery-img {
+        transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+        position: absolute;
+        bottom: -100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        color: white;
+        padding: 30px 20px 20px;
+        transition: bottom 0.3s ease;
+        text-align: center;
+    }
+
+    .gallery-card:hover .gallery-overlay {
+        bottom: 0;
+    }
+
+    .gallery-overlay h4 {
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .gallery-overlay p {
+        font-size: 0.85rem;
+        opacity: 0.8;
+        margin-bottom: 10px;
+    }
+
+    .btn-view {
+        background: var(--secondary-color);
+        color: var(--primary-dark);
+        border: none;
+        padding: 6px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .btn-view:hover {
+        background: var(--secondary-dark);
+        transform: translateY(-2px);
+    }
+
+    /* Lightbox Modal */
+    .image-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.95);
+        cursor: pointer;
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #modalCaption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    @media (max-width: 768px) {
+        .filter-btn {
+            padding: 6px 18px;
+            font-size: 0.85rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .gallery-overlay h4 {
+            font-size: 0.9rem;
+        }
+
+        .gallery-overlay p {
+            font-size: 0.7rem;
+        }
+
+        .btn-view {
+            padding: 4px 12px;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+<script>
+    function openModal(element) {
+        const img = element.closest('.gallery-card').querySelector('.gallery-img');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const captionText = document.getElementById('modalCaption');
+
+        modal.style.display = 'block';
+        modalImg.src = img.src;
+        captionText.innerHTML = img.alt;
+    }
+
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    // Gallery Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const filter = this.dataset.filter;
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                if (filter === 'all' || item.dataset.category === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    // Load More
+    let currentItems = 3;
+    document.getElementById('loadMoreBtn').addEventListener('click', function () {
+        const allItems = document.querySelectorAll('.gallery-item');
+        const hiddenItems = Array.from(allItems).slice(currentItems);
+
+        for (let i = 0; i < 3 && i < hiddenItems.length; i++) {
+            hiddenItems[i].style.display = 'block';
+        }
+        currentItems += 3;
+
+        if (currentItems >= allItems.length) {
+            this.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

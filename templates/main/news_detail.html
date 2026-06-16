@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}{{ news.title }} - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h1>{{ news.title }}</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">الرئيسية</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('main.news') }}">الأخبار</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ news.title|truncate(30) }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- News Detail Section -->
+<section class="section-padding">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Main Content -->
+            <div class="col-lg-8" data-aos="fade-up">
+                <article class="news-article">
+                    <!-- Featured Image -->
+                    <div class="article-image">
+                        {% if news.image %}
+                            <img src="{{ url_for('static', filename='uploads/' + news.image) }}" alt="{{ news.title }}" loading="lazy">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/icon/Notification.png') }}" alt="{{ news.title }}" loading="lazy">
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Meta Info -->
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar-alt"></i> {{ news.published_at.strftime('%d %B, %Y') }}</span>
+                        <span><i class="fas fa-eye"></i> {{ news.views }} مشاهدة</span>
+                        {% if news.author %}
+                            <span><i class="fas fa-user"></i> {{ news.author.username }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Article Content -->
+                    <div class="article-content">
+                        {{ news.content|safe }}
+                    </div>
+                    
+                    <!-- Share Buttons -->
+                    <div class="share-section">
+                        <h4>شارك الخبر</h4>
+                        <div class="share-buttons">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="share-btn facebook"><i class="fab fa-facebook-f"></i> فيسبوك</a>
+                            <a href="https://twitter.com/intent/tweet?url={{ request.url }}" target="_blank" class="share-btn twitter"><i class="fab fa-twitter"></i> تويتر</a>
+                            <a href="https://wa.me/?text={{ request.url }}" target="_blank" class="share-btn whatsapp"><i class="fab fa-whatsapp"></i> واتساب</a>
+                            <a href="https://www.linkedin.com/shareArticle?url={{ request.url }}" target="_blank" class="share-btn linkedin"><i class="fab fa-linkedin-in"></i> لينكدإن</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <!-- Search Widget -->
+                <div class="sidebar-widget">
+                    <h3><i class="fas fa-search"></i> بحث</h3>
+                    <form class="search-form" method="GET" action="{{ url_for('main.news') }}">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="ابحث في الأخبار...">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Recent News Widget -->
+                <div class="sidebar-widget">
+                    <h3><i class="fas fa-clock"></i> أحدث الأخبار</h3>
+                    <div class="recent-news">
+                        {% if related_news %}
+                            {% for item in related_news %}
+                            <div class="recent-item">
+                                <div class="recent-image">
+                                    {% if item.image %}
+                                        <img src="{{ url_for('static', filename='uploads/' + item.image) }}" alt="{{ item.title }}" loading="lazy">
+                                    {% else %}
+                                        <img src="{{ url_for('static', filename='images/icon/Notification.png') }}" alt="{{ item.title }}" loading="lazy">
+                                    {% endif %}
+                                </div>
+                                <div class="recent-info">
+                                    <h4><a href="{{ url_for('main.news_detail', slug=item.slug) }}">{{ item.title|truncate(40) }}</a></h4>
+                                    <span>{{ item.published_at.strftime('%d/%m/%Y') }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>لا توجد أخبار أخرى</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Categories Widget -->
+                <div class="sidebar-widget">
+                    <h3><i class="fas fa-tags"></i> التصنيفات</h3>
+                    <ul class="categories-list">
+                        <li><a href="#">أخبار المؤتمر</a> <span>12</span></li>
+                        <li><a href="#">إعلانات</a> <span>5</span></li>
+                        <li><a href="#">مواعيد هامة</a> <span>3</span></li>
+                        <li><a href="#">فرص</a> <span>4</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.news-article {
+    background: var(--bg-light);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: var(--shadow-sm);
+}
+
+.article-image {
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.article-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+}
+
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.article-meta span {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.article-meta span i {
+    color: var(--secondary-color);
+    margin-left: 8px;
+}
+
+.article-content {
+    line-height: 1.8;
+    color: var(--text-color);
+}
+
+.article-content p {
+    margin-bottom: 20px;
+}
+
+.article-content h2,
+.article-content h3 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 15px 0;
+    padding-right: 25px;
+}
+
+.article-content li {
+    margin-bottom: 8px;
+}
+
+.share-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.share-section h4 {
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: var(--transition);
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+}
+
+.share-btn.facebook {
+    background: #1877f2;
+}
+
+.share-btn.twitter {
+    background: #1da1f2;
+}
+
+.share-btn.whatsapp {
+    background: #25d366;
+}
+
+.share-btn.linkedin {
+    background: #0077b5;
+}
+
+/* Sidebar */
+.sidebar-widget {
+    background: var(--bg-light);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-sm);
+}
+
+.sidebar-widget h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--secondary-color);
+    display: inline-block;
+}
+
+.sidebar-widget h3 i {
+    color: var(--secondary-color);
+    margin-left: 8px;
+}
+
+.search-form .input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.search-form .form-control {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-light);
+}
+
+.recent-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.recent-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.recent-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.recent-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recent-info h4 {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.recent-info h4 a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.recent-info h4 a:hover {
+    color: var(--secondary-color);
+}
+
+.recent-info span {
+    font-size: 0.7rem;
+    color: var(--text-light);
+}
+
+.categories-list {
+    list-style: none;
+    padding: 0;
+}
+
+.categories-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.categories-list li a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.categories-list li a:hover {
+    color: var(--secondary-color);
+    padding-right: 5px;
+}
+
+.categories-list li span {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .news-article {
+        padding: 20px;
+    }
+    
+    .share-buttons {
+        gap: 8px;
+    }
+    
+    .share-btn {
+        padding: 6px 15px;
+        font-size: 0.75rem;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,576 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}إدارة الأخبار - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+    .page-header h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: #1a4a6e;
+    }
+    .btn-add {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-add:hover {
+        background: #a8822a;
+        transform: translateY(-2px);
+    }
+    .filter-bar {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filter-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+    }
+    .search-input {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        width: 250px;
+    }
+    .btn-reset {
+        background: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-reset:hover {
+        background: #5a6268;
+    }
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        overflow-x: auto;
+    }
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+    }
+    .custom-table th {
+        text-align: right;
+        padding: 12px 10px;
+        background: #f8f9fa;
+        color: #1a4a6e;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .custom-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+        vertical-align: middle;
+    }
+    .custom-table tr:hover {
+        background: #f8f9fa;
+    }
+    .news-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+        background: #f0f0f0;
+    }
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+    }
+    .status-published {
+        background: #22c55e;
+        color: white;
+    }
+    .status-draft {
+        background: #f59e0b;
+        color: white;
+    }
+    .btn-action {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px 8px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    .btn-edit {
+        color: #c9a03d;
+    }
+    .btn-edit:hover {
+        background: rgba(201, 160, 61, 0.1);
+    }
+    .btn-delete {
+        color: #dc2626;
+    }
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.1);
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1100;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 700px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .modal-header h3 {
+        margin: 0;
+        color: #1a4a6e;
+    }
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #333;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-family: 'Cairo', sans-serif;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        outline: none;
+        border-color: #c9a03d;
+    }
+    .form-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .form-row .form-group {
+        flex: 1;
+        min-width: 150px;
+    }
+    .image-preview {
+        margin-top: 10px;
+        max-width: 200px;
+        border-radius: 10px;
+        overflow: hidden;
+        display: none;
+    }
+    .image-preview img {
+        width: 100%;
+        height: auto;
+    }
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .checkbox-group input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+    .btn-save {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .custom-table {
+            font-size: 0.7rem;
+        }
+        .custom-table th, .custom-table td {
+            padding: 6px;
+        }
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .filter-group {
+            justify-content: space-between;
+        }
+        .search-input {
+            width: 100%;
+        }
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        .news-image {
+            width: 40px;
+            height: 40px;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <h2><i class="fas fa-newspaper"></i> إدارة الأخبار</h2>
+    <button class="btn-add" onclick="openAddModal()">
+        <i class="fas fa-plus"></i> إضافة خبر جديد
+    </button>
+</div>
+
+<div class="filter-bar">
+    <div class="filter-group">
+        <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all">جميع الحالات</option>
+            <option value="published">منشور</option>
+            <option value="draft">مسودة</option>
+        </select>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث بالعنوان..." onkeyup="applyFilters()">
+        <button class="btn-reset" onclick="resetFilters()">إعادة تعيين</button>
+    </div>
+</div>
+
+<div class="table-card">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>الصورة</th>
+                <th>العنوان</th>
+                <th>الرابط المختصر</th>
+                <th>المؤلف</th>
+                <th>تاريخ النشر</th>
+                <th>المشاهدات</th>
+                <th>الحالة</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="newsTableBody">
+            {% for news_item in news_list %}
+            <tr data-news-id="{{ news_item.id }}">
+                <td>
+                    {% if news_item.image %}
+                    <img src="{{ url_for('static', filename='uploads/' + news_item.image) }}" class="news-image" alt="{{ news_item.title }}">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/icon/Notification.png') }}" class="news-image" alt="خبر">
+                    {% endif %}
+                </td>
+                <td><strong>{{ news_item.title }}</strong>{% if news_item.title_ar %}<br><small>{{ news_item.title_ar }}</small>{% endif %}</td>
+                <td dir="ltr"><code>/news/{{ news_item.slug }}</code></td>
+                <td>{{ news_item.author.username if news_item.author else '-' }}</td>
+                <td dir="ltr">{{ news_item.published_at.strftime('%Y-%m-%d') if news_item.published_at else '-' }}<br><small>{{ news_item.published_at.strftime('%H:%M') if news_item.published_at else '' }}</small></td>
+                <td>{{ news_item.views }} </td>
+                <td>
+                    <span class="status-badge status-{{ 'published' if news_item.is_published else 'draft' }}">
+                        {{ 'منشور' if news_item.is_published else 'مسودة' }}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn-action btn-edit" onclick='editNews({
+                        "id": {{ news_item.id }},
+                        "title": {{ news_item.title|tojson }},
+                        "title_ar": {{ news_item.title_ar|tojson }},
+                        "slug": {{ news_item.slug|tojson }},
+                        "content": {{ news_item.content|tojson }},
+                        "content_ar": {{ news_item.content_ar|tojson }},
+                        "excerpt": {{ news_item.excerpt|tojson }},
+                        "is_published": {{ news_item.is_published|tojson }}
+                    })' title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action btn-delete" onclick="deleteNews({{ news_item.id }}, {{ news_item.title|tojson }})" title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center">لا توجد أخبار بعد، قم بإضافة خبر جديد</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="newsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">إضافة خبر جديد</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="newsForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="news_id" id="newsId" value="">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>العنوان (بالعربية) <span style="color: red;">*</span></label>
+                    <input type="text" name="title" id="title" required placeholder="عنوان الخبر بالعربية">
+                </div>
+                <div class="form-group">
+                    <label>العنوان (بالإنجليزية)</label>
+                    <input type="text" name="title_ar" id="titleAr" placeholder="News Title in English">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الرابط المختصر (Slug) <span style="color: red;">*</span></label>
+                    <input type="text" name="slug" id="slug" required placeholder="مثال: conference-opening-2026">
+                    <small class="text-muted">يستخدم في رابط الخبر، يجب أن يكون فريداً</small>
+                </div>
+                <div class="form-group">
+                    <label>الملخص</label>
+                    <input type="text" name="excerpt" id="excerpt" placeholder="ملخص قصير للخبر">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>المحتوى (بالعربية) <span style="color: red;">*</span></label>
+                <textarea name="content" id="content" rows="8" required placeholder="محتوى الخبر بالعربية..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>المحتوى (بالإنجليزية)</label>
+                <textarea name="content_ar" id="contentAr" rows="5" placeholder="News content in English..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>الصورة الرئيسية</label>
+                <input type="file" name="image" id="image" accept="image/*" onchange="previewImage(event)">
+                <small class="text-muted">jpg, png, jpeg, webp - الحد الأقصى 5 ميجابايت</small>
+                <div class="image-preview" id="imagePreview">
+                    <img id="previewImg" src="">
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" name="is_published" id="isPublished">
+                <label for="isPublished">نشر الخبر فوراً</label>
+            </div>
+            
+            <div class="modal-buttons">
+                <button type="submit" class="btn-save">حفظ</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف الخبر <strong id="deleteNewsTitle"></strong>؟</p>
+        <p style="font-size: 0.8rem; color: #666;">سيتم حذف الخبر وجميع بياناته بشكل نهائي.</p>
+        <div class="modal-buttons">
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-save" style="background: #dc2626;">نعم، حذف</button>
+            </form>
+            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        var preview = document.getElementById('imagePreview');
+        var img = document.getElementById('previewImg');
+        
+        reader.onload = function() {
+            img.src = reader.result;
+            preview.style.display = 'block';
+        }
+        
+        if (event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+    
+    function applyFilters() {
+        var status = document.getElementById('statusFilter').value;
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('#newsTableBody tr');
+        
+        rows.forEach(function(row) {
+            var title = (row.querySelector('td:nth-child(2)')?.innerText || '').toLowerCase();
+            var newsStatus = row.querySelector('td:nth-child(7)')?.innerText || '';
+            
+            var matchesSearch = title.includes(search);
+            var matchesStatus = (status === 'all') || 
+                (status === 'published' && newsStatus.includes('منشور')) ||
+                (status === 'draft' && newsStatus.includes('مسودة'));
+            
+            row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
+        });
+    }
+    
+    function resetFilters() {
+        document.getElementById('statusFilter').value = 'all';
+        document.getElementById('searchInput').value = '';
+        applyFilters();
+    }
+    
+    // Generate slug from title
+    document.getElementById('title').addEventListener('input', function() {
+        var title = this.value;
+        var slug = title
+            .replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-zA-Z0-9\s]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+            .toLowerCase();
+        document.getElementById('slug').value = slug;
+    });
+    
+    function openAddModal() {
+        document.getElementById('modalTitle').innerText = 'إضافة خبر جديد';
+        document.getElementById('newsId').value = '';
+        document.getElementById('title').value = '';
+        document.getElementById('titleAr').value = '';
+        document.getElementById('slug').value = '';
+        document.getElementById('excerpt').value = '';
+        document.getElementById('content').value = '';
+        document.getElementById('contentAr').value = '';
+        document.getElementById('image').value = '';
+        document.getElementById('isPublished').checked = false;
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('newsForm').action = "{{ url_for('admin.add_news') }}";
+        document.getElementById('newsModal').style.display = 'flex';
+    }
+    
+    function editNews(news) {
+        document.getElementById('modalTitle').innerText = 'تعديل الخبر';
+        document.getElementById('newsId').value = news.id;
+        document.getElementById('title').value = news.title;
+        document.getElementById('titleAr').value = news.title_ar || '';
+        document.getElementById('slug').value = news.slug;
+        document.getElementById('excerpt').value = news.excerpt || '';
+        document.getElementById('content').value = news.content;
+        document.getElementById('contentAr').value = news.content_ar || '';
+        document.getElementById('isPublished').checked = news.is_published;
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('newsForm').action = "{{ url_for('admin.edit_news', news_id=0) }}".replace('0', news.id);
+        document.getElementById('newsModal').style.display = 'flex';
+    }
+    
+    function closeModal() {
+        document.getElementById('newsModal').style.display = 'none';
+    }
+    
+    function deleteNews(id, title) {
+        document.getElementById('deleteNewsTitle').innerText = title;
+        var form = document.getElementById('deleteForm');
+        form.action = "{{ url_for('admin.delete_news', news_id=0) }}".replace('0', id);
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+    
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        var modal = document.getElementById('newsModal');
+        var deleteModal = document.getElementById('deleteModal');
+        if (event.target === modal) closeModal();
+        if (event.target === deleteModal) closeDeleteModal();
+    }
+    
+    setTimeout(function() {
+        var flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(function(msg) {
+            msg.style.transition = '0.5s';
+            msg.style.opacity = '0';
+            setTimeout(function() { msg.remove(); }, 500);
+        });
+    }, 4000);
+</script>
+{% endblock %}

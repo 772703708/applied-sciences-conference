@@ -1,0 +1,54 @@
+services:
+  - type: web
+    name: applied-science-conference
+    runtime: python
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      pip install gunicorn
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: conference-db
+          property: connectionString
+      - key: MAIL_USERNAME
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_DEFAULT_SENDER
+        sync: false
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        sync: false
+      - key: DRIVE_ROOT_ID
+        sync: false
+      - key: DRIVE_PAPERS_ROOT
+        sync: false
+      - key: DRIVE_ENERGY
+        sync: false
+      - key: DRIVE_NANOTECH
+        sync: false
+      - key: DRIVE_BIOLOGY
+        sync: false
+      - key: DRIVE_GEOLOGY
+        sync: false
+      - key: DRIVE_STATISTICS
+        sync: false
+      - key: DRIVE_CHEMISTRY
+        sync: false
+      - key: DRIVE_REGISTRATIONS
+        sync: false
+      - key: DRIVE_ATTENDANCE
+        sync: false
+      - key: DRIVE_REPORTS
+        sync: false
+
+databases:
+  - name: conference-db
+    plan: free

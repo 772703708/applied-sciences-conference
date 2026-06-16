@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>تسجيل الدخول - لوحة تحكم المؤتمر العلمي</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 16px;
+        }
+
+        /* Animated Background Elements - تحسين الأداء */
+        body::before {
+            content: "";
+            position: fixed;
+            width: min(400px, 80vw);
+            height: min(400px, 80vw);
+            background: radial-gradient(circle, rgba(201, 160, 61, 0.12), transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: min(500px, 90vw);
+            height: min(500px, 90vw);
+            background: radial-gradient(circle, rgba(26, 74, 110, 0.1), transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite reverse;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(20px, 15px);
+            }
+        }
+
+        /* Floating particles - أقل عدد وأخف أداء */
+        .particle {
+            position: fixed;
+            background: rgba(201, 160, 61, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Container - متجاوب بالكامل */
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Brand Header - شعار داخل دائرة بخلفية بيضاء */
+        .brand-header {
+            text-align: center;
+            margin-bottom: clamp(20px, 5vh, 32px);
+        }
+
+        .brand-logo {
+            width: clamp(65px, 15vw, 80px);
+            height: clamp(65px, 15vw, 80px);
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto clamp(10px, 2vh, 15px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(201, 160, 61, 0.2);
+            animation: gentleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(201, 160, 61, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25), 0 0 0 5px rgba(201, 160, 61, 0.3);
+            }
+        }
+
+        .brand-logo img {
+            width: clamp(45px, 10vw, 55px);
+            height: clamp(45px, 10vw, 55px);
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .brand-header h1 {
+            color: white;
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-header p {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: clamp(0.7rem, 3vw, 0.8rem);
+        }
+
+        /* Login Card - تحسين الـ blur ليكون أخف وأداء أفضل */
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: clamp(24px, 6vw, 36px);
+            padding: clamp(24px, 5vw, 42px) clamp(20px, 5vw, 36px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        @media (hover: hover) {
+            .login-card:hover {
+                border-color: rgba(201, 160, 61, 0.35);
+                box-shadow: 0 25px 45px -12px rgba(201, 160, 61, 0.15);
+            }
+        }
+
+        /* Title */
+        .login-title {
+            text-align: center;
+            margin-bottom: clamp(20px, 5vh, 32px);
+        }
+
+        .login-title h2 {
+            font-size: clamp(1.5rem, 6vw, 1.9rem);
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff, #e0b354);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .login-title p {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: clamp(0.75rem, 3.5vw, 0.85rem);
+        }
+
+        /* Input Groups - تحسين المسافات */
+        .input-group {
+            position: relative;
+            margin-bottom: clamp(16px, 4vh, 22px);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: clamp(12px, 3.5vw, 15px) clamp(40px, 10vw, 50px) clamp(12px, 3.5vw, 15px) clamp(40px, 10vw, 45px);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: clamp(14px, 4vw, 18px);
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #c9a03d;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(201, 160, 61, 0.12);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: clamp(0.8rem, 3vw, 0.85rem);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: clamp(14px, 4vw, 18px);
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.45);
+            transition: all 0.25s ease;
+            font-size: clamp(0.9rem, 3.5vw, 1rem);
+        }
+
+        .input-group input:focus+.input-icon {
+            color: #c9a03d;
+        }
+
+        .toggle-password {
+            position: absolute;
+            left: clamp(14px, 4vw, 18px);
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.45);
+            transition: all 0.25s ease;
+            z-index: 5;
+            font-size: clamp(0.9rem, 3.5vw, 1rem);
+        }
+
+        .toggle-password:hover {
+            color: #c9a03d;
+        }
+
+        /* Options Row - تحسين للموبايل */
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: clamp(16px, 4vh, 22px) 0 clamp(20px, 5vh, 28px);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .remember-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .remember-checkbox input {
+            width: clamp(16px, 4vw, 18px);
+            height: clamp(16px, 4vw, 18px);
+            cursor: pointer;
+            accent-color: #c9a03d;
+        }
+
+        .remember-checkbox span {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: clamp(0.75rem, 3vw, 0.85rem);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: clamp(0.75rem, 3vw, 0.85rem);
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .forgot-link:hover {
+            color: #c9a03d;
+        }
+
+        /* Submit Button - تحسين اللمس */
+        .submit-btn {
+            width: 100%;
+            padding: clamp(12px, 3.5vw, 15px);
+            background: linear-gradient(135deg, #1a4a6e, #c9a03d);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: clamp(0.9rem, 4vw, 1rem);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.4s ease;
+        }
+
+        @media (hover: hover) {
+            .submit-btn:hover::before {
+                left: 100%;
+            }
+
+            .submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 22px rgba(201, 160, 61, 0.25);
+            }
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Admin Note */
+        .admin-note {
+            text-align: center;
+            margin-top: clamp(16px, 4vh, 22px);
+            padding-top: clamp(12px, 3vh, 16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: clamp(0.65rem, 3vw, 0.75rem);
+        }
+
+        .admin-note i {
+            color: #c9a03d;
+            font-size: clamp(0.7rem, 3vw, 0.8rem);
+        }
+
+        /* Back to Home Link */
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-size: clamp(0.75rem, 3.5vw, 0.85rem);
+            margin-top: clamp(16px, 4vh, 22px);
+            transition: all 0.25s ease;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .back-home:hover {
+            color: #c9a03d;
+        }
+
+        /* Flash Messages - أفضل للموبايل */
+        .flash-wrap {
+            position: fixed;
+            top: clamp(12px, 3vh, 20px);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: min(92%, 450px);
+            pointer-events: none;
+        }
+
+        .flash-message {
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: clamp(12px, 4vw, 14px);
+            padding: clamp(10px, 3vw, 14px) clamp(16px, 4vw, 22px);
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 500;
+            animation: slideDown 0.35s ease;
+            border-right: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+            pointer-events: auto;
+        }
+
+        .flash-message.flash-success {
+            border-right-color: #10b981;
+        }
+
+        .flash-message.flash-danger {
+            border-right-color: #ef4444;
+        }
+
+        .flash-message.flash-warning {
+            border-right-color: #f59e0b;
+        }
+
+        .flash-message.flash-info {
+            border-right-color: #3b82f6;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal - محسن بالكامل */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e1e32, #18182b);
+            border-radius: clamp(24px, 6vw, 32px);
+            padding: clamp(24px, 6vw, 36px) clamp(20px, 5vw, 32px);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            animation: modalFadeIn 0.25s ease;
+            margin: auto;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content i {
+            font-size: clamp(2.5rem, 8vw, 3rem);
+            color: #c9a03d;
+            margin-bottom: 12px;
+        }
+
+        .modal-content h3 {
+            color: white;
+            margin-bottom: 8px;
+            font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+        }
+
+        .modal-content p {
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: clamp(18px, 5vh, 24px);
+            font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+            line-height: 1.5;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: clamp(12px, 3.5vw, 14px);
+            border-radius: 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            color: white;
+            outline: none;
+            margin-bottom: 20px;
+            font-size: clamp(0.85rem, 3.5vw, 0.9rem);
+            transition: all 0.25s ease;
+            text-align: right;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .modal-content input:focus {
+            border-color: #c9a03d;
+            box-shadow: 0 0 0 3px rgba(201, 160, 61, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            min-width: 110px;
+            padding: clamp(10px, 3vw, 12px);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #1a4a6e, #c9a03d);
+            border: none;
+            color: white;
+        }
+
+        @media (hover: hover) {
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 12px rgba(201, 160, 61, 0.3);
+            }
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* تحسينات إضافية للشاشات الصغيرة جداً */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .login-card {
+                padding: 22px 18px;
+            }
+
+            .options-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .forgot-link {
+                align-self: flex-start;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-buttons button {
+                width: 100%;
+            }
+        }
+
+        /* أجهزة لوحية صغيرة */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .login-container {
+                max-width: 420px;
+            }
+
+            .options-row {
+                gap: 8px;
+            }
+        }
+
+        /* شاشات كبيرة */
+        @media (min-width: 1200px) {
+            .login-container {
+                max-width: 480px;
+            }
+
+            .login-card {
+                padding: 44px 40px;
+            }
+        }
+
+        /* منع التمرير الأفقي */
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="particles"></div>
+
+    <div class="login-container">
+        <!-- Brand Header - شعار داخل دائرة بخلفية بيضاء -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="شعار المؤتمر">
+            </div>
+            <h1>المؤتمر العلمي الدولي الأول</h1>
+            <p>كلية العلوم التطبيقية - جامعة ذمار</p>
+        </div>
+
+        <!-- Flash Messages -->
+        <div class="flash-wrap">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">
+                <i
+                    class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Login Card -->
+        <div class="login-card">
+            <div class="login-title">
+                <h2>تسجيل الدخول</h2>
+                <p>مرحباً بك في لوحة تحكم المؤتمر</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" name="email" placeholder="البريد الإلكتروني" required autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye-slash toggle-password" onclick="togglePassword()"></i>
+                    <input type="password" name="password" id="passwordField" placeholder="كلمة المرور" required>
+                </div>
+
+                <div class="options-row">
+                    <label class="remember-checkbox">
+                        <input type="checkbox" name="remember">
+                        <span>تذكرني</span>
+                    </label>
+                    <a href="#" class="forgot-link" id="forgotPasswordBtn">نسيت كلمة المرور؟</a>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    دخول
+                </button>
+
+                <div class="admin-note">
+                    <i class="fas fa-shield-alt"></i>
+                    هذه الصفحة مخصصة للمشرفين فقط
+                </div>
+            </form>
+
+            <a href="{{ url_for('main.home') }}" class="back-home">
+                <i class="fas fa-arrow-right"></i> العودة إلى الرئيسية
+            </a>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-key"></i>
+            <h3>استعادة كلمة المرور</h3>
+            <p>أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور</p>
+            <input type="email" id="resetEmail" placeholder="البريد الإلكتروني">
+            <div class="modal-buttons">
+                <button type="button" class="btn-submit" onclick="sendResetLink()">إرسال رابط إعادة التعيين</button>
+                <button type="button" class="btn-cancel" id="closeModal">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles - أقل عدد لتحسين الأداء
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = window.innerWidth < 768 ? 15 : 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = Math.random() * 12 + 8 + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordField = document.getElementById('passwordField');
+            const toggleIcon = document.querySelector('.toggle-password');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+
+        // Forgot Password Modal
+        const forgotBtn = document.getElementById('forgotPasswordBtn');
+        const modal = document.getElementById('forgotModal');
+        const closeModal = document.getElementById('closeModal');
+
+        if (forgotBtn) {
+            forgotBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+            });
+        }
+
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        function sendResetLink() {
+            const email = document.getElementById('resetEmail').value;
+            if (!email) {
+                alert('الرجاء إدخال البريد الإلكتروني');
+                return;
+            }
+
+            fetch('{{ url_for("auth.forgot_password") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+                        modal.style.display = 'none';
+                        document.getElementById('resetEmail').value = '';
+                    } else {
+                        alert(data.message || '❌ حدث خطأ، يرجى المحاولة مرة أخرى');
+                    }
+                })
+                .catch(error => {
+                    alert('❌ حدث خطأ في الاتصال بالخادم');
+                });
+        }
+
+        // Auto hide flash messages
+        setTimeout(() => {
+            const flashes = document.querySelectorAll('.flash-message');
+            flashes.forEach(msg => {
+                msg.style.transition = '0.4s';
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 400);
+            });
+        }, 4000);
+
+        // Initialize particles عند تحميل الصفحة
+        createParticles();
+
+        // إعادة إنشاء الجسيمات عند تغيير حجم الشاشة (اختياري لتحسين الأداء)
+        let resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                const container = document.getElementById('particles');
+                if (container) {
+                    container.innerHTML = '';
+                    createParticles();
+                }
+            }, 250);
+        });
+    </script>
+</body>
+
+</html>

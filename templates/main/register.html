@@ -1,0 +1,757 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل المشاركة - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================
+       تصميم منظم - احترافي بحدود واضحة
+       ======================================== */
+
+    .register-wrapper {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .register-hero {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        padding: 50px 0 40px;
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+        border-radius: 0 0 24px 24px;
+    }
+
+    .register-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
+    .register-hero p {
+        font-size: 0.95rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .register-form-container {
+        background: var(--bg-light);
+        border-radius: 24px;
+        padding: 32px 40px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        margin-bottom: 40px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .form-description {
+        background: rgba(201, 160, 61, 0.08);
+        border-radius: 12px;
+        padding: 12px 20px;
+        margin-bottom: 28px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-right: 3px solid var(--secondary-color);
+    }
+
+    .form-section {
+        background: transparent;
+        border: 1.5px solid #dce4ec;
+        border-radius: 20px;
+        padding: 24px 28px;
+        margin-bottom: 28px;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .form-section:hover {
+        border-color: var(--secondary-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--secondary-color);
+    }
+
+    .section-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .section-icon i {
+        font-size: 1rem;
+        color: var(--primary-dark);
+    }
+
+    .section-title h3 {
+        margin: 0;
+        color: var(--primary-color);
+        font-size: 1.15rem;
+        font-weight: 600;
+    }
+
+    /* ========================================
+       حقول الإدخال - حدود واضحة وقوية
+       ======================================== */
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-color);
+    }
+
+    .form-group label .required {
+        color: #e74c3c;
+        margin-right: 3px;
+    }
+
+    .form-group label .english-label {
+        color: var(--text-light);
+        font-size: 0.75rem;
+        font-weight: normal;
+        margin-right: 6px;
+    }
+
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        transition: all 0.25s ease;
+        background: var(--bg-light);
+        color: var(--text-color);
+        line-height: 1.5;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: var(--secondary-color) !important;
+        box-shadow: 0 0 0 3px rgba(201, 160, 61, 0.15);
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    /* ========================================
+       حقل رقم الجوال - مفتاح الدولة ديناميكي
+       ======================================== */
+    .phone-input-wrapper {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .country-code-select {
+        width: 160px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .phone-number-input {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    /* حقل مفتاح الدولة - التحويل بين select و input */
+    .country-code-select select,
+    .country-code-select input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        background: var(--bg-light);
+        color: var(--text-color);
+        transition: all 0.25s ease;
+    }
+
+    .country-code-select select:focus,
+    .country-code-select input:focus {
+        outline: none;
+        border-color: var(--secondary-color) !important;
+        box-shadow: 0 0 0 3px rgba(201, 160, 61, 0.15);
+    }
+
+    /* ========================================
+       الأزرار الاختيارية (Radio Buttons)
+       ======================================== */
+    .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 8px;
+    }
+
+    .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+
+    .radio-option input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--secondary-color);
+        margin: 0;
+    }
+
+    .radio-option label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: normal;
+        color: var(--text-color);
+    }
+
+    /* ========================================
+       Checkboxes
+       ======================================== */
+    .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 8px;
+    }
+
+    .checkbox-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .checkbox-option input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--secondary-color);
+        margin: 0;
+    }
+
+    .checkbox-option label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: normal;
+        color: var(--text-color);
+    }
+
+    /* ========================================
+       Select Days
+       ======================================== */
+    .select-days {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        background: var(--bg-light);
+        color: var(--text-color);
+    }
+
+    .select-days:focus {
+        outline: none;
+        border-color: var(--secondary-color) !important;
+        box-shadow: 0 0 0 3px rgba(201, 160, 61, 0.15);
+    }
+
+    /* ========================================
+       الإقرارات
+       ======================================== */
+    .declarations {
+        background: rgba(201, 160, 61, 0.05);
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin: 24px 0;
+        border: 1px solid rgba(201, 160, 61, 0.25);
+    }
+
+    .declaration-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .declaration-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .declaration-item input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--secondary-color);
+    }
+
+    .declaration-item label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-color);
+    }
+
+    .declaration-item label .required {
+        color: #e74c3c;
+    }
+
+    /* زر الإرسال */
+    .submit-btn {
+        width: 100%;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+        color: var(--primary-dark);
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(201, 160, 61, 0.35);
+    }
+
+    /* تنبيهات */
+    .alert {
+        padding: 12px 18px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .is-invalid {
+        border-color: #e74c3c !important;
+        background-color: rgba(231, 76, 60, 0.02);
+    }
+
+    .small-hint {
+        font-size: 0.7rem;
+        color: var(--text-light);
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* استجابة */
+    @media (max-width: 768px) {
+        .register-wrapper {
+            padding: 0 16px;
+        }
+
+        .register-form-container {
+            padding: 20px;
+        }
+
+        .form-section {
+            padding: 18px 20px;
+        }
+
+        .phone-input-wrapper {
+            flex-direction: column;
+        }
+
+        .country-code-select {
+            width: 100%;
+        }
+
+        .register-hero h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="register-hero">
+    <div class="register-wrapper">
+        <h1 data-aos="fade-up">تسجيل المشاركة في المؤتمر</h1>
+        <p data-aos="fade-up" data-aos-delay="100">يرجى تعبئة البيانات التالية لإتمام التسجيل والمشاركة في المؤتمر
+            العلمي الدولي الأول بكلية العلوم التطبيقية</p>
+    </div>
+</section>
+
+<section style="padding: 0 0 60px 0;">
+    <div class="register-wrapper">
+        <div class="register-form-container" data-aos="fade-up" data-aos-delay="100">
+            <div class="form-description">
+                <i class="fas fa-info-circle" style="color: var(--secondary-color); margin-left: 8px;"></i>
+                يرجى تعبئة البيانات التالية لإتمام التسجيل والمشاركة في المؤتمر العلمي الدولي الأول بكلية العلوم
+                التطبيقية.
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <i class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('auth.register') }}" id="registrationForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <!-- ======================================== -->
+                <!-- القسم الأول: البيانات الشخصية -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-user"></i></div>
+                        <h3>البيانات الشخصية</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الاسم الكامل (Full Name) <span class="required">*</span></label>
+                        <input type="text" name="full_name" class="form-control" required
+                            placeholder="ادخل الاسم الرباعي">
+                    </div>
+
+                    <div class="form-group">
+                        <label>البريد الإلكتروني (Email) <span class="required">*</span></label>
+                        <input type="email" name="email" class="form-control" required placeholder="example@domain.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>رقم الجوال / واتساب (Phone / WhatsApp) <span class="required">*</span></label>
+                        <div class="phone-input-wrapper">
+                            <div class="country-code-select" id="countryCodeContainer">
+                                <!-- القائمة المنسدلة (تظهر بشكل افتراضي) -->
+                                <select name="country_code" class="form-select" id="countryCodeSelect">
+                                    <option value="+967">🇾🇪 +967 (اليمن)</option>
+                                    <option value="+966">🇸🇦 +966 (السعودية)</option>
+                                    <option value="+971">🇦🇪 +971 (الإمارات)</option>
+                                    <option value="+974">🇶🇦 +974 (قطر)</option>
+                                    <option value="+965">🇰🇼 +965 (الكويت)</option>
+                                    <option value="+968">🇴🇲 +968 (عمان)</option>
+                                    <option value="+973">🇧🇭 +973 (البحرين)</option>
+                                    <option value="+962">🇯🇴 +962 (الأردن)</option>
+                                    <option value="+20">🇪🇬 +20 (مصر)</option>
+                                    <option value="+213">🇩🇿 +213 (الجزائر)</option>
+                                    <option value="+212">🇲🇦 +212 (المغرب)</option>
+                                    <option value="+216">🇹🇳 +216 (تونس)</option>
+                                    <option value="+218">🇱🇾 +218 (ليبيا)</option>
+                                    <option value="+249">🇸🇩 +249 (السودان)</option>
+                                    <option value="+1">🇺🇸 +1 (الولايات المتحدة)</option>
+                                    <option value="+44">🇬🇧 +44 (بريطانيا)</option>
+                                    <option value="+91">🇮🇳 +91 (الهند)</option>
+                                    <option value="+60">🇲🇾 +60 (ماليزيا)</option>
+                                    <option value="+90">🇹🇷 +90 (تركيا)</option>
+                                    <option value="other">🌐 + (أخرى - إدخال يدوي)</option>
+                                </select>
+                                <!-- حقل الإدخال اليدوي (يظهر فقط عند اختيار "أخرى") -->
+                                <input type="text" name="country_code_custom" id="customCountryCodeInput"
+                                    class="form-control" placeholder="مثال: 49 (لألمانيا) أو +33 (لفرنسا)"
+                                    style="display: none;">
+                            </div>
+                            <div class="phone-number-input">
+                                <input type="tel" name="phone" class="form-control" required
+                                    placeholder="أدخل رقم الجوال">
+                                <small class="small-hint">أدخل رقم الجوال    </small>
+                            </div>
+                        </div>
+                        <small class="small-hint" style="margin-top: 8px; display: block;">✏️اذا لم تجد الدوله المقصوده اختار اخرى وادخل مفتاح الدوله يديوياً 
+                           </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الجهة التابع لها (Affiliation) <span class="required">*</span></label>
+                        <input type="text" name="affiliation" class="form-control" required
+                            placeholder="الجامعة / المؤسسة / الشركة / المركز البحثي">
+                    </div>
+
+                    <div class="form-group">
+                        <label>المؤهل / الوظيفة (Qualification / Position) <span class="required">*</span></label>
+                        <input type="text" name="position" class="form-control" required
+                            placeholder="مثال: دكتوراه / أستاذ مساعد / باحث / طالب دكتوراه">
+                    </div>
+
+                    <div class="form-group">
+                        <label>الدولة (Country) <span class="required">*</span></label>
+                        <input type="text" name="country" class="form-control" list="countryList" required
+                            placeholder=" اسم الدولة ">
+                        <datalist id="countryList">
+                            <option value="اليمن">اليمن</option>
+                            <option value="السعودية">المملكة العربية السعودية</option>
+                            <option value="الإمارات">الإمارات العربية المتحدة</option>
+                            <option value="قطر">قطر</option>
+                            <option value="الكويت">الكويت</option>
+                            <option value="عمان">سلطنة عمان</option>
+                            <option value="البحرين">البحرين</option>
+                            <option value="الأردن">الأردن</option>
+                            <option value="مصر">مصر</option>
+                            <option value="الجزائر">الجزائر</option>
+                            <option value="المغرب">المغرب</option>
+                            <option value="تونس">تونس</option>
+                            <option value="ليبيا">ليبيا</option>
+                            <option value="السودان">السودان</option>
+                            <option value="العراق">العراق</option>
+                            <option value="فلسطين">فلسطين</option>
+                            <option value="لبنان">لبنان</option>
+                            <option value="سوريا">سوريا</option>
+                            <option value="الولايات المتحدة">الولايات المتحدة</option>
+                            <option value="بريطانيا">بريطانيا</option>
+                            <option value="ماليزيا">ماليزيا</option>
+                            <option value="تركيا">تركيا</option>
+                            <option value="ألمانيا">ألمانيا</option>
+                            <option value="فرنسا">فرنسا</option>
+                            <option value="كندا">كندا</option>
+                            <option value="أستراليا">أستراليا</option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الثاني: تفاصيل الحضور -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-calendar-alt"></i></div>
+                        <h3>تفاصيل الحضور</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label>أيام الحضور (Attendance Days) <span class="required">*</span></label>
+                        <select name="attendance_days" class="select-days" required>
+                            <option value="">-- اختر أيام الحضور --</option>
+                            <option value="day1">اليوم الأول فقط (27 يوليو 2026)</option>
+                            <option value="day2">اليوم الثاني فقط (28 يوليو 2026)</option>
+                            <option value="day3">اليوم الثالث فقط (29 يوليو 2026)</option>
+                            <option value="day1_day2">اليوم الأول والثاني</option>
+                            <option value="day2_day3">اليوم الثاني والثالث</option>
+                            <option value="all">جميع أيام المؤتمر (3 أيام)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>نوع الحضور (Attendance Type) <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="attendance_type" value="in_person" required>
+                                <span>حضور شخصي</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="attendance_type" value="online">
+                                <span>حضور عن بُعد</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الثالث: الفعاليات المصاحبة -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-star-of-life"></i></div>
+                        <h3>الفعاليات المصاحبة</h3>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="attend_sessions" value="yes">
+                            <span>أرغب بحضور الجلسات العلمية</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="attend_exhibition" value="yes">
+                            <span>أرغب بحضور معرض آفاق المستقبل</span>
+                        </label>
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="get_certificate" value="yes">
+                            <span>أرغب بالحصول على شهادة حضور</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الرابع: ملاحظات إضافية -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-pen-alt"></i></div>
+                        <h3>ملاحظات إضافية</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea name="additional_notes" class="form-control" rows="4"
+                            placeholder="اضف ملاحظة أو استفسارات ترغب بها... (اختياري)"></textarea>
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الخامس: الإقرارات -->
+                <!-- ======================================== -->
+                <div class="declarations">
+                    <div class="declaration-item">
+                        <input type="checkbox" name="declare_accuracy" id="declareAccuracy" required>
+                        <label for="declareAccuracy">أقر بصحة جميع البيانات المدخلة. <span
+                                class="required">*</span></label>
+                    </div>
+                    <div class="declaration-item">
+                        <input type="checkbox" name="agree_policies" id="agreePolicies" required>
+                        <label for="agreePolicies">أوافق على شروط وسياسات المؤتمر. <span
+                                class="required">*</span></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-check-circle"></i>
+                    تسجيل المشاركة
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    // ديناميكية خيار "أخرى" - تحويل select إلى input في نفس المكان
+    const countrySelect = document.getElementById('countryCodeSelect');
+    const customInput = document.getElementById('customCountryCodeInput');
+    const container = document.getElementById('countryCodeContainer');
+
+    function toggleCountryCodeInput() {
+        if (countrySelect.value === 'other') {
+            // إخفاء الـ select وإظهار حقل الإدخال
+            countrySelect.style.display = 'none';
+            customInput.style.display = 'block';
+            customInput.focus();
+            // تعيين name للحقل المخصص ليرسل مع النموذج
+            customInput.setAttribute('name', 'country_code');
+            // إزالة name من الـ select حتى لا يتم إرسال قيمته
+            countrySelect.removeAttribute('name');
+        } else {
+            // إظهار الـ select وإخفاء حقل الإدخال
+            countrySelect.style.display = 'block';
+            customInput.style.display = 'none';
+            // تعيين name للـ select
+            countrySelect.setAttribute('name', 'country_code');
+            // إزالة name من الحقل المخصص
+            customInput.removeAttribute('name');
+            customInput.value = '';
+        }
+    }
+
+    countrySelect.addEventListener('change', toggleCountryCodeInput);
+    toggleCountryCodeInput(); // تنفيذ عند تحميل الصفحة للتأكد من الحالة الصحيحة
+
+    // دمج رقم الجوال مع مفتاح الدولة قبل الإرسال
+    const form = document.getElementById('registrationForm');
+
+    form.addEventListener('submit', function (e) {
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        // التحقق من أزرار الراديو
+        const attendanceTypeRadios = document.querySelectorAll('input[name="attendance_type"]');
+        let typeSelected = false;
+        attendanceTypeRadios.forEach(radio => {
+            if (radio.checked) typeSelected = true;
+        });
+
+        if (!typeSelected) {
+            alert('الرجاء اختيار نوع الحضور');
+            isValid = false;
+        }
+
+        // التحقق من الحقول المطلوبة الأخرى
+        requiredFields.forEach(field => {
+            // تخطي حقول مفتاح الدولة المخفية التي لا تحتاج للتحقق بصرياً
+            if (field.id === 'customCountryCodeInput' && countrySelect.value !== 'other') {
+                return;
+            }
+            if (field.type === 'checkbox' && !field.checked) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else if (field.type !== 'checkbox' && field.type !== 'radio' && !field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+
+        // التحقق الخاص من حقل المفتاح المخصص إذا كان مفعلاً
+        if (countrySelect.value === 'other') {
+            if (!customInput.value.trim()) {
+                alert('الرجاء إدخال مفتاح الدولة');
+                customInput.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                customInput.classList.remove('is-invalid');
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('يرجى تعبئة جميع الحقول الإلزامية');
+            return false;
+        }
+
+        // دمج مفتاح الدولة مع رقم الجوال في حقل full_phone
+        let code = '';
+        if (countrySelect.value === 'other') {
+            let customCode = customInput.value.trim();
+            if (customCode && !customCode.startsWith('+')) {
+                customCode = '+' + customCode;
+            }
+            code = customCode;
+        } else {
+            code = countrySelect.value;
+        }
+
+        const phoneInput = document.querySelector('input[name="phone"]');
+        const fullPhoneInput = document.createElement('input');
+        fullPhoneInput.type = 'hidden';
+        fullPhoneInput.name = 'full_phone';
+        fullPhoneInput.value = code + phoneInput.value.trim();
+        form.appendChild(fullPhoneInput);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+<!-- templates/auth/paper_detail.html -->
+{% extends "base.html" %}
+
+{% block title %}تفاصيل البحث - {{ paper.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2>تفاصيل الورقة العلمية</h2>
+    <p><strong>رقم التتبع:</strong> {{ paper.tracking_id }}</p>
+    <p><strong>العنوان:</strong> {{ paper.title }}</p>
+    <p><strong>التخصص:</strong> {{ paper.track }}</p>
+    <p><strong>الحالة:</strong> {{ paper.status }}</p>
+    <p><strong>الباحث الرئيسي:</strong> {{ paper.main_author_name }}</p>
+    {% if paper.gdrive_view_link %}
+        <a href="{{ paper.gdrive_view_link }}" target="_blank" class="btn btn-primary">عرض الملف</a>
+    {% endif %}
+    <a href="{{ url_for('submission.my_papers') }}" class="btn btn-secondary">العودة إلى أبحاثي</a>
+</div>
+{% endblock %}

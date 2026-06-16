@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}المتحدثون - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    
+</section>
+
+<!-- Keynote Speakers -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+            <h2>المتحدثون الرئيسيون</h2>
+            <p class="lead">نخبة من العلماء والخبراء المتميزين على المستوى المحلي والدولي</p>
+        </div>
+
+        <div class="row g-4">
+            {% if keynote_speakers %}
+            {% for speaker in keynote_speakers %}
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                <div class="speaker-card">
+                    <div class="speaker-img-wrapper">
+                        {% if speaker.photo %}
+                        <img src="{{ url_for('static', filename='uploads/' + speaker.photo) }}" alt="{{ speaker.name }}"
+                            class="speaker-img">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/icon/Profile 1.png') }}"
+                            alt="{{ speaker.name }}" class="speaker-img">
+                        {% endif %}
+                        <div class="speaker-social">
+                            {% if speaker.linkedin %}<a href="{{ speaker.linkedin }}" target="_blank"><i
+                                    class="fab fa-linkedin-in"></i></a>{% endif %}
+                            {% if speaker.twitter %}<a href="{{ speaker.twitter }}" target="_blank"><i
+                                    class="fab fa-twitter"></i></a>{% endif %}
+                            {% if speaker.email %}<a href="mailto:{{ speaker.email }}"><i
+                                    class="fas fa-envelope"></i></a>{% endif %}
+                        </div>
+                    </div>
+                    <div class="speaker-info">
+                        <h3>{{ speaker.name }}</h3>
+                        <p class="speaker-title">{{ speaker.title }}</p>
+                        <p class="speaker-affiliation"><i class="fas fa-university"></i> {{ speaker.affiliation }}</p>
+                        <p class="speaker-bio">{{ speaker.bio[:120] + '...' if speaker.bio and speaker.bio|length > 120
+                            else speaker.bio }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> سيتم الإعلان عن قائمة المتحدثين الرئيسيين قريباً
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Other Speakers -->
+<section class="section-padding section-bg">
+    <div class="container">
+        <div class="text-center mb-4" data-aos="fade-up">
+            <h2>المتحدثون والباحثون المشاركون</h2>
+            <p class="lead">نخبة من الباحثين والأكاديميين من مختلف الجامعات</p>
+        </div>
+
+        <div class="row g-3">
+            {% for speaker in other_speakers %}
+            <div class="col-lg-2 col-md-3 col-4" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                <div class="speaker-mini">
+                    {% if speaker.photo %}
+                    <img src="{{ url_for('static', filename='uploads/' + speaker.photo) }}" alt="{{ speaker.name }}"
+                        class="speaker-mini-img">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/icon/Profile 1.png') }}" alt="{{ speaker.name }}"
+                        class="speaker-mini-img">
+                    {% endif %}
+                    <h4>{{ speaker.name }}</h4>
+                    <p class="mini-title">{{ speaker.title[:40] if speaker.title else 'باحث' }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        padding: 50px 0 40px;
+        margin-top: -1px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a,
+    .breadcrumb-item {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--secondary-color);
+    }
+
+    /* Speaker Card */
+    .speaker-card {
+        background: var(--bg-light);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        height: 100%;
+    }
+
+    .speaker-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .speaker-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 220px;
+    }
+
+    .speaker-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .speaker-card:hover .speaker-img {
+        transform: scale(1.03);
+    }
+
+    .speaker-social {
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        transition: bottom 0.3s ease;
+    }
+
+    .speaker-card:hover .speaker-social {
+        bottom: 0;
+    }
+
+    .speaker-social a {
+        width: 30px;
+        height: 30px;
+        background: var(--secondary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-dark);
+        transition: var(--transition);
+        font-size: 0.8rem;
+    }
+
+    .speaker-social a:hover {
+        transform: translateY(-2px);
+        background: white;
+    }
+
+    .speaker-info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .speaker-info h3 {
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+        color: var(--primary-color);
+    }
+
+    .speaker-title {
+        color: var(--secondary-color);
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
+
+    .speaker-affiliation {
+        color: var(--text-light);
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+    }
+
+    .speaker-affiliation i {
+        margin-left: 4px;
+        font-size: 0.65rem;
+    }
+
+    .speaker-bio {
+        font-size: 0.75rem;
+        color: var(--text-light);
+        line-height: 1.5;
+        margin-bottom: 0;
+    }
+
+    /* Speaker Mini */
+    .speaker-mini {
+        text-align: center;
+        background: var(--bg-light);
+        padding: 15px 10px;
+        border-radius: 12px;
+        transition: var(--transition);
+        height: 100%;
+    }
+
+    .speaker-mini:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .speaker-mini-img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+        border: 2px solid var(--secondary-color);
+        padding: 2px;
+    }
+
+    .speaker-mini h4 {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+        color: var(--primary-color);
+    }
+
+    .mini-title {
+        font-size: 0.7rem;
+        color: var(--secondary-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .speaker-img-wrapper {
+            height: 180px;
+        }
+
+        .speaker-info h3 {
+            font-size: 1rem;
+        }
+
+        .speaker-title {
+            font-size: 0.7rem;
+        }
+
+        .speaker-mini-img {
+            width: 55px;
+            height: 55px;
+        }
+
+        .speaker-mini h4 {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}

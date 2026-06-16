@@ -1,0 +1,1169 @@
+{% extends "base.html" %}
+
+{% block title %}تقديم ورقة علمية - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ========================================
+       تصميم متجاوب واحترافي
+       ======================================== */
+
+    .submission-hero {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        padding: 50px 0 40px;
+        text-align: center;
+        color: white;
+    }
+
+    .submission-hero h1 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
+    .submission-hero p {
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .submission-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .submission-form-container {
+        background: var(--bg-light);
+        border-radius: 24px;
+        padding: 32px 40px;
+        margin-top: -30px;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-description {
+        background: rgba(201, 160, 61, 0.08);
+        border-radius: 12px;
+        padding: 12px 20px;
+        margin-bottom: 28px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        border-right: 3px solid var(--secondary-color);
+    }
+
+    .form-section {
+        background: transparent;
+        border: 1px solid #cbd5e0;
+        border-radius: 20px;
+        padding: 24px 28px;
+        margin-bottom: 28px;
+        transition: all 0.2s ease;
+    }
+
+    .form-section:hover {
+        border-color: var(--secondary-color);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--secondary-color);
+    }
+
+    .section-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .section-icon i {
+        font-size: 1rem;
+        color: var(--primary-dark);
+    }
+
+    .section-title h3 {
+        margin: 0;
+        color: var(--primary-color);
+        font-size: 1.15rem;
+        font-weight: 600;
+    }
+
+    .section-title h3 .required {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-right: 5px;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text-color);
+    }
+
+    .form-group label .required {
+        color: #e74c3c;
+        margin-right: 3px;
+    }
+
+    .form-group label .english-label {
+        color: var(--text-light);
+        font-size: 0.7rem;
+        font-weight: normal;
+        margin-right: 6px;
+    }
+
+    /* ========================================
+       حقل المفتاح والدولة - تصميم محسن
+       ======================================== */
+    .phone-input-wrapper {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .country-code-wrapper {
+        position: relative;
+        width: 180px;
+        flex-shrink: 0;
+    }
+
+    .country-code-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #cbd5e0 !important;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        background: var(--bg-light);
+        color: var(--text-color);
+        transition: all 0.25s ease;
+    }
+
+    .country-code-input:focus {
+        border-color: var(--secondary-color) !important;
+        outline: none;
+        animation: glowPulse 1.2s infinite;
+    }
+
+    .country-dropdown-btn {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--secondary-color);
+        font-size: 1rem;
+    }
+
+    .country-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-light);
+        border: 1px solid #cbd5e0;
+        border-radius: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 100;
+        display: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .country-suggestions.show {
+        display: block;
+    }
+
+    .country-suggestion {
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background 0.2s;
+        font-size: 0.85rem;
+    }
+
+    .country-suggestion:hover {
+        background: rgba(201, 160, 61, 0.1);
+    }
+
+    .phone-number-input {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    /* ========================================
+       حقول الإدخال - borders واضحة
+       ======================================== */
+    .form-control,
+    .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #cbd5e0 !important;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        transition: all 0.25s ease;
+        background: var(--bg-light);
+        color: var(--text-color);
+        line-height: 1.5;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--secondary-color) !important;
+        outline: none;
+        animation: glowPulse 1.2s infinite;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    @keyframes glowPulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(201, 160, 61, 0.2);
+            border-color: var(--secondary-color) !important;
+        }
+
+        50% {
+            box-shadow: 0 0 0 4px rgba(201, 160, 61, 0.1);
+            border-color: var(--secondary-light) !important;
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(201, 160, 61, 0);
+            border-color: var(--secondary-color) !important;
+        }
+    }
+
+    /* ========================================
+       حقل رفع الملفات - مع زر إلغاء
+       ======================================== */
+    .file-upload-wrapper {
+        position: relative;
+    }
+
+    .file-upload-area {
+        border: 2px dashed #cbd5e0;
+        border-radius: 16px;
+        padding: 30px 20px;
+        text-align: center;
+        transition: var(--transition);
+        cursor: pointer;
+        background: var(--bg-gray);
+    }
+
+    .file-upload-area:hover {
+        border-color: var(--secondary-color);
+        background: rgba(201, 160, 61, 0.05);
+    }
+
+    .file-upload-area.dragover {
+        border-color: var(--secondary-color);
+        background: rgba(201, 160, 61, 0.1);
+    }
+
+    .file-upload-area i {
+        font-size: 2.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 10px;
+    }
+
+    .file-upload-area p {
+        margin-bottom: 5px;
+        color: var(--text-light);
+        font-size: 0.85rem;
+    }
+
+    .file-upload-area .file-name {
+        font-size: 0.8rem;
+        color: var(--secondary-color);
+        margin-top: 8px;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    /* زر إلغاء الملف */
+    .file-cancel-btn {
+        display: none;
+        margin-top: 10px;
+        padding: 6px 16px;
+        background: #dc2626;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: var(--transition);
+    }
+
+    .file-cancel-btn:hover {
+        background: #b91c1c;
+    }
+
+    .file-info {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 15px;
+        background: #f0fdf4;
+        border-radius: 10px;
+        border: 1px solid #bbf7d0;
+        margin-top: 10px;
+    }
+
+    .file-info .file-icon {
+        color: #22c55e;
+        font-size: 1.2rem;
+    }
+
+    .file-info .file-details {
+        flex: 1;
+    }
+
+    .file-info .file-details .file-name-text {
+        font-weight: 600;
+        color: #166534;
+        font-size: 0.85rem;
+    }
+
+    .file-info .file-details .file-size-text {
+        font-size: 0.7rem;
+        color: #6b7280;
+    }
+
+    /* Sub-track Select */
+    .subtrack-group {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px dashed #cbd5e0;
+    }
+
+    /* Co-authors */
+    .co-authors-container {
+        margin-top: 12px;
+    }
+
+    .co-author-item {
+        background: var(--bg-gray);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #cbd5e0;
+    }
+
+    .co-author-info {
+        flex: 1;
+    }
+
+    .co-author-info strong {
+        color: var(--primary-color);
+        font-size: 0.9rem;
+    }
+
+    .co-author-info p {
+        margin: 4px 0 0;
+        font-size: 0.75rem;
+        color: var(--text-light);
+    }
+
+    /* الإقرارات */
+    .declarations {
+        background: rgba(201, 160, 61, 0.05);
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-top: 20px;
+        border: 1px solid rgba(201, 160, 61, 0.15);
+    }
+
+    .declaration-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .declaration-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .declaration-item input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--secondary-color);
+    }
+
+    .declaration-item label {
+        margin: 0;
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--text-color);
+    }
+
+    .declaration-item label .required {
+        color: #e74c3c;
+        margin-right: 3px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+        color: var(--primary-dark);
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(201, 160, 61, 0.35);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Alert Messages */
+    .alert {
+        padding: 12px 18px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .is-invalid {
+        border-color: #e74c3c !important;
+        background-color: rgba(231, 76, 60, 0.02);
+    }
+
+    .small-hint {
+        font-size: 0.7rem;
+        color: var(--text-light);
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .submission-wrapper {
+            padding: 0 16px;
+        }
+
+        .submission-form-container {
+            padding: 20px;
+        }
+
+        .form-section {
+            padding: 18px 20px;
+        }
+
+        .phone-input-wrapper {
+            flex-direction: column;
+        }
+
+        .country-code-wrapper {
+            width: 100%;
+        }
+
+        .submission-hero h1 {
+            font-size: 1.5rem;
+        }
+
+        .declarations {
+            padding: 16px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-section {
+            padding: 16px;
+        }
+
+        .section-title h3 {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="submission-hero">
+    <div class="submission-wrapper">
+        <h1 data-aos="fade-up">تقديم ورقة علمية</h1>
+        <p data-aos="fade-up" data-aos-delay="100">يرجى تعبئة النموذج التالي وإرفاق الورقة العلمية وفق تعليمات المؤتمر
+        </p>
+    </div>
+</section>
+
+<section style="padding: 0 0 60px 0;">
+    <div class="submission-wrapper">
+        <div class="submission-form-container" data-aos="fade-up" data-aos-delay="100">
+            <div class="form-description">
+                <i class="fas fa-info-circle" style="color: var(--secondary-color); margin-left: 8px;"></i>
+                يرجى تعبئة البيانات التالية بدقة. سيتم إرسال الورقة العلمية إلى المحكم المختص في المجال.
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <i class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" enctype="multipart/form-data" id="submissionForm">
+                {{ form.csrf_token }}
+
+                <!-- ======================================== -->
+                <!-- القسم الأول: بيانات الباحث الرئيسي -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-user"></i></div>
+                        <h3>بيانات الباحث الرئيسي</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الاسم الكامل (Full Name) <span class="required">*</span></label>
+                        <input type="text" name="main_author_name" class="form-control" required
+                            placeholder="ادخل الاسم الرباعي">
+                    </div>
+
+                    <div class="form-group">
+                        <label>البريد الإلكتروني (Email) <span class="required">*</span></label>
+                        <input type="email" name="main_author_email" class="form-control" required
+                            placeholder="example@domain.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>رقم الجوال (Phone / WhatsApp) <span class="required">*</span></label>
+                        <div class="phone-input-wrapper">
+                            <div class="country-code-wrapper">
+                                <input type="text" name="country_code" id="countryCodeInput" class="country-code-input"
+                                    placeholder="+967" value="+967" list="countryCodeList">
+                                <button type="button" class="country-dropdown-btn" onclick="toggleCountryDropdown()">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div id="countrySuggestions" class="country-suggestions">
+                                    <div class="country-suggestion" data-code="+967" data-country="اليمن">🇾🇪 +967
+                                        اليمن</div>
+                                    <div class="country-suggestion" data-code="+966" data-country="السعودية">🇸🇦 +966
+                                        السعودية</div>
+                                    <div class="country-suggestion" data-code="+971" data-country="الإمارات">🇦🇪 +971
+                                        الإمارات</div>
+                                    <div class="country-suggestion" data-code="+974" data-country="قطر">🇶🇦 +974 قطر
+                                    </div>
+                                    <div class="country-suggestion" data-code="+965" data-country="الكويت">🇰🇼 +965
+                                        الكويت</div>
+                                    <div class="country-suggestion" data-code="+968" data-country="عمان">🇴🇲 +968 عمان
+                                    </div>
+                                    <div class="country-suggestion" data-code="+973" data-country="البحرين">🇧🇭 +973
+                                        البحرين</div>
+                                    <div class="country-suggestion" data-code="+962" data-country="الأردن">🇯🇴 +962
+                                        الأردن</div>
+                                    <div class="country-suggestion" data-code="+20" data-country="مصر">🇪🇬 +20 مصر
+                                    </div>
+                                    <div class="country-suggestion" data-code="+213" data-country="الجزائر">🇩🇿 +213
+                                        الجزائر</div>
+                                    <div class="country-suggestion" data-code="+212" data-country="المغرب">🇲🇦 +212
+                                        المغرب</div>
+                                    <div class="country-suggestion" data-code="+216" data-country="تونس">🇹🇳 +216 تونس
+                                    </div>
+                                    <div class="country-suggestion" data-code="+218" data-country="ليبيا">🇱🇾 +218
+                                        ليبيا</div>
+                                    <div class="country-suggestion" data-code="+249" data-country="السودان">🇸🇩 +249
+                                        السودان</div>
+                                    <div class="country-suggestion" data-code="+1" data-country="الولايات المتحدة">🇺🇸
+                                        +1 الولايات المتحدة</div>
+                                    <div class="country-suggestion" data-code="+44" data-country="بريطانيا">🇬🇧 +44
+                                        بريطانيا</div>
+                                    <div class="country-suggestion" data-code="+91" data-country="الهند">🇮🇳 +91 الهند
+                                    </div>
+                                    <div class="country-suggestion" data-code="+60" data-country="ماليزيا">🇲🇾 +60
+                                        ماليزيا</div>
+                                    <div class="country-suggestion" data-code="+90" data-country="تركيا">🇹🇷 +90 تركيا
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="phone-number-input">
+                                <input type="tel" name="main_author_phone" class="form-control" required
+                                    placeholder="أدخل رقم الجوال">
+                            </div>
+                        </div>
+                        <small class="small-hint">أدخل مفتاح الدولة ثم رقم الجوال</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الجهة التابع لها (Affiliation) <span class="required">*</span></label>
+                        <input type="text" name="main_author_affiliation" class="form-control" required
+                            placeholder="الجامعة / المؤسسة / المركز البحثي">
+                    </div>
+
+                    <div class="form-group">
+                        <label>المنصب / الوظيفة (Position) <span class="required">*</span></label>
+                        <input type="text" name="position" class="form-control" required
+                            placeholder="مثال: أستاذ / باحث / طالب دكتوراه">
+                    </div>
+
+                    <div class="form-group">
+                        <label>الدولة (Country) <span class="required">*</span></label>
+                        <input type="text" name="country" class="form-control" list="countryList" required
+                            placeholder="اكتب اسم الدولة">
+                        <datalist id="countryList">
+                            <option value="اليمن">اليمن</option>
+                            <option value="السعودية">المملكة العربية السعودية</option>
+                            <option value="الإمارات">الإمارات العربية المتحدة</option>
+                            <option value="قطر">قطر</option>
+                            <option value="الكويت">الكويت</option>
+                            <option value="عمان">سلطنة عمان</option>
+                            <option value="البحرين">البحرين</option>
+                            <option value="مصر">مصر</option>
+                            <option value="الجزائر">الجزائر</option>
+                            <option value="المغرب">المغرب</option>
+                            <option value="تونس">تونس</option>
+                            <option value="ليبيا">ليبيا</option>
+                            <option value="السودان">السودان</option>
+                            <option value="العراق">العراق</option>
+                            <option value="فلسطين">فلسطين</option>
+                            <option value="الأردن">الأردن</option>
+                            <option value="لبنان">لبنان</option>
+                            <option value="سوريا">سوريا</option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الثاني: بيانات الورقة العلمية -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-microscope"></i></div>
+                        <h3>بيانات الورقة العلمية</h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label>عنوان الورقة العلمية باللغة العربية (Arabic Title) <span
+                                class="required">*</span></label>
+                        <input type="text" name="title" class="form-control" required
+                            placeholder="عنوان البحث باللغة العربية">
+                    </div>
+
+                    <div class="form-group">
+                        <label>عنوان الورقة العلمية باللغة الإنجليزية (English Title) <span
+                                class="required">*</span></label>
+                        <input type="text" name="title_en" class="form-control" required
+                            placeholder="Research Title in English">
+                    </div>
+
+                    <div class="form-group">
+                        <label>المحور العلمي الرئيسي (Main Track) <span class="required">*</span></label>
+                        <select name="track" class="form-select" id="mainTrack" required>
+                            <option value="">-- اختر المحور العلمي --</option>
+                            <option value="energy">الطاقة المستدامة وأنظمة الطاقة المتجددة المتقدمة</option>
+                            <option value="nanotechnology">علم المواد المتقدمة وتكنولوجيا النانو</option>
+                            <option value="biology">العلوم البيولوجية والتكنولوجيا الحيوية</option>
+                            <option value="geology">الجيولوجيا والبيئة والموارد المائية</option>
+                            <option value="statistics">الإحصاء والنمذجة الرياضية</option>
+                            <option value="chemistry">الكيمياء وتطبيقاتها التكنولوجية</option>
+                        </select>
+                    </div>
+
+                    <!-- ===== حقل نوع المشاركة ===== -->
+                    <div class="form-group">
+                        <label>نوع المشاركة (Submission Type) <span class="required">*</span></label>
+                        <select name="submission_type" class="form-select" required>
+                            <option value="paper">ورقة علمية</option>
+                            <option value="poster">ملصق علمي (Poster)</option>
+                            <option value="workshop">ورشة عمل</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group subtrack-group" id="subtrackGroup" style="display: none;">
+                        <label>التخصص أو المجال الفرعي (Sub-track) <span class="required">*</span></label>
+                        <select name="subtrack" class="form-select" id="subTrack">
+                            <option value="">-- اختر التخصص الفرعي --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الملخص العلمي (Abstract) <span class="required">*</span></label>
+                        <textarea name="abstract" class="form-control" rows="6" required
+                            placeholder="اكتب ملخص البحث هنا (200-500 كلمة)"></textarea>
+                        <small class="small-hint">الملخص يجب أن يتضمن أهداف البحث، المنهجية، النتائج الرئيسية،
+                            والتوصيات</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الكلمات المفتاحية (Keywords) <span class="required">*</span></label>
+                        <input type="text" name="keywords" class="form-control" required
+                            placeholder="كلمات مفتاحية مفصولة بفواصل، مثال: الطاقة المتجددة، الخلايا الشمسية، النانو">
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الثالث: المؤلفون المشاركون -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-users"></i></div>
+                        <h3>أسماء الباحثين المشاركين (اختياري)</h3>
+                    </div>
+
+                    <textarea name="co_authors" id="co_authors" class="form-control" rows="4" placeholder="أدخل بيانات كل مؤلف مشارك في سطر منفصل بهذا التنسيق:
+الاسم الكامل - البريد الإلكتروني - الجهة"></textarea>
+                    <small class="small-hint">مثال: أحمد محمد علي - ahmed@example.com - جامعة صنعاء</small>
+                    <div id="coAuthorsPreview"></div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الرابع: المرفقات مع زر إلغاء -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-paperclip"></i></div>
+                        <h3>المرفقات <span class="required">*</span></h3>
+                    </div>
+
+                    <div class="form-group">
+                        <label>الورقة العلمية (Upload File) <span class="required">*</span></label>
+                        <div class="file-upload-wrapper">
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p><strong>انقر لاختيار الملف</strong></p>
+                                <p class="text-muted">PDF, DOC, DOCX - الحد الأقصى 25 ميجابايت</p>
+                                <div class="file-name" id="fileName"></div>
+                            </div>
+                            <input type="file" name="paper_file" id="paperFile" class="file-input"
+                                accept=".pdf,.doc,.docx" required>
+
+                            <!-- معلومات الملف المرفوع -->
+                            <div class="file-info" id="fileInfo">
+                                <span class="file-icon"><i class="fas fa-file-pdf"></i></span>
+                                <div class="file-details">
+                                    <div class="file-name-text" id="fileInfoName">ملف البحث.pdf</div>
+                                    <div class="file-size-text" id="fileInfoSize">2.5 MB</div>
+                                </div>
+                                <button type="button" class="file-cancel-btn" id="fileCancelBtn">
+                                    <i class="fas fa-times"></i> إلغاء
+                                </button>
+                            </div>
+                        </div>
+                        <small class="small-hint">يمكنك رفع ملف بصيغة PDF أو Word (قابل للتعديل)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ملاحظة للباحث (اختياري)</label>
+                        <textarea name="researcher_note" class="form-control" rows="3"
+                            placeholder="يمكنك إضافة أي ملاحظات أو تنويهات ترغب بإيصالها إلى اللجنة العلمية أو المحكمين"></textarea>
+                    </div>
+                </div>
+
+                <!-- ======================================== -->
+                <!-- القسم الخامس: الإقرارات والتعهدات -->
+                <!-- ======================================== -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <div class="section-icon"><i class="fas fa-file-signature"></i></div>
+                        <h3>الإقرارات والتعهدات <span class="required">*</span></h3>
+                    </div>
+                    <div class="form-description"
+                        style="margin-bottom: 20px; background: rgba(231, 76, 60, 0.05); border-right-color: #e74c3c;">
+                        <i class="fas fa-exclamation-triangle" style="color: #e74c3c; margin-left: 8px;"></i>
+                        يرجى قراءة الإقرارات التالية بعناية، حيث تعتبر موافقتك عليها شرطاً أساسياً لقبول الورقة العلمية.
+                    </div>
+
+                    <div class="declarations">
+                        <div class="declaration-item">
+                            <input type="checkbox" name="declare_ownership" id="declareOwnership" required>
+                            <label for="declareOwnership">
+                                أقر بأن هذه الورقة العلمية من إعداد الباحثين المذكورين في هذا النموذج.
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                        <div class="declaration-item">
+                            <input type="checkbox" name="declare_originality" id="declareOriginality" required>
+                            <label for="declareOriginality">
+                                أقر بأن البحث أصيل ولم يسبق نشره أو تقديمه للنشر في أي مؤتمر أو مجلة علمية أخرى.
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                        <div class="declaration-item">
+                            <input type="checkbox" name="declare_responsibility" id="declareResponsibility" required>
+                            <label for="declareResponsibility">
+                                أتحمل المسؤولية العلمية الكاملة عن محتوى البحث.
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                        <div class="declaration-item">
+                            <input type="checkbox" name="declare_review" id="declareReview" required>
+                            <label for="declareReview">
+                                أوافق على إجراءات التحكيم والنشر الخاصة بالمؤتمر.
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                        <div class="declaration-item">
+                            <input type="checkbox" name="declare_policies" id="declarePolicies" required>
+                            <label for="declarePolicies">
+                                أوافق على شروط وسياسات المشاركة في المؤتمر.
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                        <div class="declaration-item">
+                            <input type="checkbox" name="agree_terms" id="agreeTerms" required>
+                            <label for="agreeTerms">
+                                أوافق على شروط النشر وسياسة الخصوصية.
+                                <span class="required">*</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    إرسال الورقة العلمية
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+    // ========================================
+    // Country Code Dropdown
+    // ========================================
+    function toggleCountryDropdown() {
+        const dropdown = document.getElementById('countrySuggestions');
+        dropdown.classList.toggle('show');
+    }
+
+    document.addEventListener('click', function (event) {
+        const wrapper = document.querySelector('.country-code-wrapper');
+        const dropdown = document.getElementById('countrySuggestions');
+        if (wrapper && !wrapper.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    document.querySelectorAll('.country-suggestion').forEach(item => {
+        item.addEventListener('click', function () {
+            const code = this.dataset.code;
+            document.getElementById('countryCodeInput').value = code;
+            document.getElementById('countrySuggestions').classList.remove('show');
+        });
+    });
+
+    // ========================================
+    // Dynamic Sub-track based on Main Track
+    // ========================================
+    const subTracks = {
+        energy: [
+            "الخلايا الشمسية والأنظمة الكهروضوئية المتقدمة",
+            "الطاقة النووية السلمية",
+            "الطاقة الكهرومائية والوقود الحيوي",
+            "طاقة الرياح والطاقة الحرارية الجوفية",
+            "أنظمة تخزين الطاقة",
+            "المحفزات النانوية في تحويل الطاقة",
+            "المواد المتقدمة لكفاءة الطاقة وتحلية المياه",
+            "الشبكات الذكية والذكاء الاصطناعي في إدارة الطاقة"
+        ],
+        nanotechnology: [
+            "المواد النانوية لتكنولوجيا الاتصالات والإلكترونيات",
+            "أنظمة توصيل الدواء النانوية",
+            "المواد المتقدمة للطاقة الشمسية",
+            "المواد المتقدمة للمعالجة البيئية",
+            "المواد النانوية للتطبيقات الزراعية",
+            "المواد الحيوية والمضادات الحيوية النانوية",
+            "المواد الوظيفية للهيدروجين الأخضر",
+            "المواد المتقدمة للبصريات والمستشعرات"
+        ],
+        biology: [
+            "الأحياء الدقيقة والأمراض المعدية",
+            "علم الخلية والأنسجة",
+            "الهندسة الوراثية والتكنولوجيا الحيوية",
+            "مقاومة المضادات الحيوية",
+            "المعلوماتية الحيوية",
+            "الملوثات الميكروبية في الغذاء والماء",
+            "فسيولوجيا الكائنات الحية وعلم الحشرات",
+            "بيولوجيا النباتات وتطبيقاتها",
+            "النباتات الطبية والموارد الحيوية"
+        ],
+        geology: [
+            "الأمن المائي وحصاد المياه",
+            "التغيرات المناخية",
+            "التدهور الكمي والنوعي للمياه",
+            "المخاطر الجيولوجية والبيئية"
+        ],
+        statistics: [
+            "النمذجة الرياضية والتنبؤ الاقتصادي",
+            "الإحصاء التطبيقي وتحليل المخاطر",
+            "بحوث العمليات والتحسين الصناعي",
+            "تحليل البيانات الاجتماعية والتنموية",
+            "الرياضيات البحتة والتطبيقية",
+            "الأمن السيبراني والرياضيات الحاسوبية"
+        ],
+        chemistry: [
+            "كيمياء المواد والطاقة المستدامة",
+            "الكيمياء الكهربائية وخلايا الوقود",
+            "تقنيات إنتاج الهيدروجين الأخضر",
+            "كيمياء النانو وتطبيقاتها الصناعية",
+            "كيمياء البوليمرات والمواد البلاستيكية الحيوية",
+            "المنتجات الطبيعية وتطبيقاتها الطبية",
+            "كيمياء الغذاء والدواء وضبط الجودة",
+            "الكيمياء البيئية ومعالجة التلوث",
+            "الكيمياء التحليلية وضبط الجودة"
+        ]
+    };
+
+    const mainTrackSelect = document.getElementById('mainTrack');
+    const subtrackGroup = document.getElementById('subtrackGroup');
+    const subTrackSelect = document.getElementById('subTrack');
+
+    mainTrackSelect.addEventListener('change', function () {
+        const selectedTrack = this.value;
+
+        if (selectedTrack && subTracks[selectedTrack]) {
+            subTrackSelect.innerHTML = '<option value="">-- اختر التخصص الفرعي --</option>';
+            subTracks[selectedTrack].forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub;
+                option.textContent = sub;
+                subTrackSelect.appendChild(option);
+            });
+            subtrackGroup.style.display = 'block';
+            subTrackSelect.required = true;
+        } else {
+            subtrackGroup.style.display = 'none';
+            subTrackSelect.required = false;
+        }
+    });
+
+    // ========================================
+    // File Upload with Cancel Button
+    // ========================================
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('paperFile');
+    const fileName = document.getElementById('fileName');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileInfoName = document.getElementById('fileInfoName');
+    const fileInfoSize = document.getElementById('fileInfoSize');
+    const fileCancelBtn = document.getElementById('fileCancelBtn');
+
+    // Click to upload
+    fileUploadArea.addEventListener('click', () => fileInput.click());
+
+    // Drag and drop
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('dragover');
+    });
+
+    fileUploadArea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+    });
+
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+
+    // File input change
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            handleFileSelect(fileInput.files[0]);
+        }
+    });
+
+    // Cancel button
+    fileCancelBtn.addEventListener('click', () => {
+        fileInput.value = '';
+        fileInfo.style.display = 'none';
+        fileName.innerHTML = '';
+        fileUploadArea.style.display = 'block';
+        fileCancelBtn.style.display = 'none';
+    });
+
+    function handleFileSelect(file) {
+        const validTypes = ['application/pdf', 'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+
+        if (validTypes.includes(file.type)) {
+            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+
+            // تحديث واجهة الملف المرفوع
+            const fileIcon = file.type === 'application/pdf' ? 'fa-file-pdf' : 'fa-file-word';
+            fileInfo.querySelector('.file-icon i').className = `fas ${fileIcon}`;
+            fileInfoName.textContent = file.name;
+            fileInfoSize.textContent = `${sizeMB} MB`;
+
+            fileInfo.style.display = 'flex';
+            fileUploadArea.style.display = 'none';
+            fileCancelBtn.style.display = 'inline-flex';
+            fileName.innerHTML = '';
+
+        } else {
+            alert('يرجى اختيار ملف بصيغة PDF أو Word (DOC, DOCX)');
+            fileInput.value = '';
+        }
+    }
+
+    // ========================================
+    // Co-authors Preview
+    // ========================================
+    const coAuthorsTextarea = document.getElementById('co_authors');
+    const coAuthorsPreview = document.getElementById('coAuthorsPreview');
+
+    function updateCoAuthorsPreview() {
+        const text = coAuthorsTextarea.value;
+        const lines = text.split('\n');
+        let html = '<div class="co-authors-container">';
+        let hasAuthors = false;
+
+        lines.forEach((line) => {
+            if (line.trim()) {
+                const parts = line.split('-');
+                const name = parts[0]?.trim() || '';
+                const email = parts[1]?.trim() || '';
+                const affiliation = parts[2]?.trim() || '';
+
+                if (name) {
+                    hasAuthors = true;
+                    html += `
+                        <div class="co-author-item">
+                            <div class="co-author-info">
+                                <strong>${escapeHtml(name)}</strong>
+                                ${email ? `<p><i class="fas fa-envelope"></i> ${escapeHtml(email)}</p>` : ''}
+                                ${affiliation ? `<p><i class="fas fa-building"></i> ${escapeHtml(affiliation)}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        });
+
+        html += '</div>';
+        coAuthorsPreview.innerHTML = hasAuthors ? html : '';
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    coAuthorsTextarea.addEventListener('input', updateCoAuthorsPreview);
+
+    // ========================================
+    // Form Submission
+    // ========================================
+    const form = document.getElementById('submissionForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function (e) {
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            if (field.type === 'checkbox' && !field.checked) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else if (field.type !== 'checkbox' && field.type !== 'radio' && !field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+
+        const agreeTerms = document.getElementById('agreeTerms');
+        if (agreeTerms && !agreeTerms.checked) {
+            agreeTerms.classList.add('is-invalid');
+            isValid = false;
+        }
+
+        // التحقق من وجود ملف
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('يرجى رفع ملف الورقة العلمية');
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('يرجى تعبئة جميع الحقول الإلزامية والإقرارات ورفع الملف');
+            return false;
+        }
+
+        // Combine phone with country code
+        const countryCodeInput = document.getElementById('countryCodeInput');
+        const phoneInput = document.querySelector('input[name="main_author_phone"]');
+        const fullPhoneInput = document.createElement('input');
+        fullPhoneInput.type = 'hidden';
+        fullPhoneInput.name = 'full_phone';
+        fullPhoneInput.value = countryCodeInput.value + phoneInput.value;
+        form.appendChild(fullPhoneInput);
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCoAuthorsPreview();
+    });
+</script>
+{% endblock %}

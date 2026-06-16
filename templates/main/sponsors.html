@@ -1,0 +1,355 @@
+{% extends "base.html" %}
+
+{% block title %}الرعاة والشركاء - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-up">
+                <h1>الرعاة والشركاء</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{{ url_for('main.home') }}">الرئيسية</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">الرعاة والشركاء</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sponsors Section -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2>رعاة المؤتمر</h2>
+            <p class="lead">بفضل دعم شركائنا ورعاتنا الكرام، يتحقق هذا الحدث العلمي المتميز</p>
+        </div>
+
+        <div class="row g-5">
+            <!-- Platinum Sponsors -->
+            <div class="col-12" data-aos="fade-up">
+                <div class="sponsor-tier">
+                    <h3 class="tier-title platinum">الرعاة البلاتينيون</h3>
+                    <div class="row g-4 justify-content-center">
+                        <!-- الهيئة العامة للموارد المائية -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sponsor-card platinum-card">
+                                <div class="sponsor-logo">
+                                    <img src="{{ url_for('static', filename='images/NWR.JPG') }}"
+                                        alt="الهيئة العامة للموارد المائية">
+                                </div>
+                                <div class="sponsor-info">
+                                    <h3>الهيئة العامة للموارد المائية</h3>
+                                    <p class="sponsor-desc">National Water Resources Authority - NWRA</p>
+                                    <div class="sponsor-tag platinum-tag">راعي بلاتيني</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- المؤسسة العامة للاتصالات -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sponsor-card platinum-card">
+                                <div class="sponsor-logo">
+                                    <img src="{{ url_for('static', filename='images/YT.jpg') }}"
+                                        alt="المؤسسة العامة للاتصالات">
+                                </div>
+                                <div class="sponsor-info">
+                                    <h3>المؤسسة العامة للاتصالات</h3>
+                                    <p class="sponsor-desc">Yemen Telecommunications - YT</p>
+                                    <div class="sponsor-tag platinum-tag">راعي بلاتيني</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gold Sponsors -->
+            <div class="col-12" data-aos="fade-up" data-aos-delay="100">
+                <div class="sponsor-tier">
+                    <h3 class="tier-title gold">الرعاة الذهبيون</h3>
+                    <div class="row g-4 justify-content-center">
+                        <!-- شركة يمن موبايل -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sponsor-card gold-card">
+                                <div class="sponsor-logo">
+                                    <img src="{{ url_for('static', filename='images/Mobile.png') }}" alt="يمن موبايل">
+                                </div>
+                                <div class="sponsor-info">
+                                    <h3>يمن موبايل</h3>
+                                    <p class="sponsor-desc">Yemen Mobile</p>
+                                    <div class="sponsor-tag gold-tag">راعي ذهبي</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Silver Sponsors -->
+            <div class="col-12" data-aos="fade-up" data-aos-delay="200">
+                <div class="sponsor-tier">
+                    <h3 class="tier-title silver">الرعاة الفضيون</h3>
+                    <div class="row g-4 justify-content-center">
+                        <!-- داديه للتجارة العامة -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sponsor-card silver-card">
+                                <div class="sponsor-logo">
+                                    <img src="{{ url_for('static', filename='images/DADIAH.jfif') }}"
+                                        alt="داديه للتجارة العامة">
+                                </div>
+                                <div class="sponsor-info">
+                                    <h3>داديه للتجارة العامة</h3>
+                                    <p class="sponsor-desc">DADIAH General Trading</p>
+                                    <div class="sponsor-tag silver-tag">راعي فضي</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- مختبرات الدبعي -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="sponsor-card silver-card">
+                                <div class="sponsor-logo">
+                                    <img src="{{ url_for('static', filename='images/DL.png') }}" alt="مختبرات الدبعي">
+                                </div>
+                                <div class="sponsor-info">
+                                    <h3>مختبرات الدبعي التخصصية</h3>
+                                    <p class="sponsor-desc">Al-Dubai Specialized Laboratories - DL</p>
+                                    <div class="sponsor-tag silver-tag">راعي فضي</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action - Become a Sponsor -->
+        <div class="sponsor-cta text-center mt-5" data-aos="fade-up">
+            <h3>كن شريكاً في النجاح</h3>
+            <p>نحن ندعوكم للمشاركة في رعاية هذا الحدث العلمي الكبير، والمساهمة في دعم البحث العلمي والتطوير التقني</p>
+            <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">تواصل معنا للرعاية</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+        padding: 50px 0 40px;
+        margin-top: -1px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item a,
+    .breadcrumb-item {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .breadcrumb-item.active {
+        color: var(--secondary-color);
+    }
+
+    /* Sponsor Tiers */
+    .sponsor-tier {
+        margin-bottom: 50px;
+    }
+
+    .tier-title {
+        text-align: center;
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        position: relative;
+        display: inline-block;
+        width: auto;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .tier-title.platinum {
+        color: #e5e4e2;
+        border-bottom: 3px solid #e5e4e2;
+    }
+
+    .tier-title.gold {
+        color: #ffd700;
+        border-bottom: 3px solid #ffd700;
+    }
+
+    .tier-title.silver {
+        color: #c0c0c0;
+        border-bottom: 3px solid #c0c0c0;
+    }
+
+    .tier-title:after {
+        display: none;
+    }
+
+    /* Sponsor Cards */
+    .sponsor-card {
+        background: var(--bg-light);
+        border-radius: 20px;
+        padding: 30px 25px;
+        text-align: center;
+        transition: var(--transition);
+        height: 100%;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+    }
+
+    .sponsor-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .platinum-card {
+        border-top: 4px solid #e5e4e2;
+    }
+
+    .gold-card {
+        border-top: 4px solid #ffd700;
+    }
+
+    .silver-card {
+        border-top: 4px solid #c0c0c0;
+    }
+
+    .sponsor-logo {
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+    }
+
+    .sponsor-logo img {
+        max-width: 100%;
+        max-height: 90px;
+        object-fit: contain;
+        transition: var(--transition);
+    }
+
+    .sponsor-card:hover .sponsor-logo img {
+        transform: scale(1.05);
+    }
+
+    .sponsor-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+    }
+
+    .sponsor-desc {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        margin-bottom: 15px;
+    }
+
+    .sponsor-tag {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .platinum-tag {
+        background: linear-gradient(135deg, #e5e4e2, #c0c0c0);
+        color: #1a1a2e;
+    }
+
+    .gold-tag {
+        background: linear-gradient(135deg, #ffd700, #daa520);
+        color: #1a1a2e;
+    }
+
+    .silver-tag {
+        background: linear-gradient(135deg, #c0c0c0, #a9a9a9);
+        color: #1a1a2e;
+    }
+
+    /* Sponsor CTA */
+    .sponsor-cta {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        padding: 50px 30px;
+        border-radius: 24px;
+        color: white;
+        margin-top: 40px;
+    }
+
+    .sponsor-cta h3 {
+        color: white;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .sponsor-cta p {
+        opacity: 0.9;
+        margin-bottom: 25px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .sponsor-cta .btn-primary {
+        background: var(--secondary-color);
+        color: var(--primary-dark);
+        border: none;
+        padding: 12px 35px;
+        font-weight: 600;
+    }
+
+    .sponsor-cta .btn-primary:hover {
+        background: var(--secondary-dark);
+        transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .tier-title {
+            font-size: 1.3rem;
+        }
+
+        .sponsor-logo {
+            height: 100px;
+        }
+
+        .sponsor-logo img {
+            max-height: 70px;
+        }
+
+        .sponsor-info h3 {
+            font-size: 1rem;
+        }
+
+        .sponsor-cta {
+            padding: 35px 20px;
+        }
+
+        .sponsor-cta h3 {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+{% endblock %}

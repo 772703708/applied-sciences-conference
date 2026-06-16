@@ -1,0 +1,564 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}إدارة المحكمين - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: #1a4a6e;
+    }
+
+    .btn-add {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-add:hover {
+        background: #a8822a;
+        transform: translateY(-2px);
+    }
+
+    .filter-bar {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        overflow-x: auto;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+    }
+
+    .custom-table th {
+        text-align: right;
+        padding: 12px 10px;
+        background: #f8f9fa;
+        color: #1a4a6e;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .custom-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+        vertical-align: middle;
+    }
+
+    .custom-table tr:hover {
+        background: #f8f9fa;
+    }
+
+    .specialty-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        background: #e0e7ff;
+        color: #4338ca;
+        margin: 2px;
+    }
+
+    .btn-action {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px 8px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+        color: #c9a03d;
+    }
+
+    .btn-edit:hover {
+        background: rgba(201, 160, 61, 0.1);
+    }
+
+    .btn-delete {
+        color: #dc2626;
+    }
+
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.1);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1100;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        color: #1a4a6e;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-family: 'Cairo', sans-serif;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #c9a03d;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .btn-save {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .specialties-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 5px;
+    }
+
+    .specialty-tag {
+        background: #e0e7ff;
+        color: #4338ca;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .specialty-tag .remove {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .add-specialty {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .add-specialty input {
+        flex: 1;
+    }
+
+    .add-specialty button {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .search-input {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        width: 250px;
+    }
+
+    @media (max-width: 768px) {
+        .custom-table {
+            font-size: 0.7rem;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 6px;
+        }
+
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <h2><i class="fas fa-user-check"></i> إدارة المحكمين</h2>
+    <button class="btn-add" onclick="openAddModal()">
+        <i class="fas fa-plus"></i> إضافة محكم جديد
+    </button>
+</div>
+
+<div class="filter-bar">
+    <select id="specialtyFilter" class="filter-select" onchange="applyFilters()">
+        <option value="all">جميع التخصصات</option>
+        <option value="الطاقة">الطاقة</option>
+        <option value="النانو">النانو</option>
+        <option value="الأحياء">الأحياء</option>
+        <option value="الجيولوجيا">الجيولوجيا</option>
+        <option value="الإحصاء">الإحصاء</option>
+        <option value="الكيمياء">الكيمياء</option>
+        <option value="الفيزياء">الفيزياء</option>
+        <option value="الرياضيات">الرياضيات</option>
+    </select>
+    <input type="text" id="searchInput" class="search-input" placeholder="بحث بالاسم أو البريد..."
+        onkeyup="applyFilters()">
+    <a href="{{ url_for('admin.reviewers') }}" class="btn-reset"
+        style="background: #6c757d; color: white; padding: 8px 16px; border-radius: 10px; text-decoration: none; font-size: 0.8rem;">إعادة
+        تعيين</a>
+</div>
+
+<div class="table-card">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>الاسم</th>
+                <th>الدرجة العلمية</th>
+                <th>البريد الإلكتروني</th>
+                <th>رقم الجوال</th>
+                <th>التخصصات</th>
+                <th>تاريخ الإضافة</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="reviewersTableBody">
+            {% for reviewer in reviewers %}
+            <tr data-reviewer-id="{{ reviewer.id }}">
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ reviewer.name }}</strong></td>
+                <td>{{ reviewer.degree }}</td>
+                <td>{{ reviewer.email }}</td>
+                <td dir="ltr">{{ reviewer.phone }}</td>
+                <td>
+                    <div class="specialties-container">
+                        {% for spec in reviewer.specialties.split(',') if spec %}
+                        <span class="specialty-badge">{{ spec }}</span>
+                        {% endfor %}
+                    </div>
+                </td>
+                <td>{{ reviewer.created_at.strftime('%Y-%m-%d') if reviewer.created_at else 'جديد' }}</td>
+                <td>
+                    <button class="btn-action btn-edit" onclick='editReviewer({
+                        "id": {{ reviewer.id }},
+                        "name": {{ reviewer.name|tojson }},
+                        "degree": {{ reviewer.degree|tojson }},
+                        "email": {{ reviewer.email|tojson }},
+                        "phone": {{ reviewer.phone|tojson }},
+                        "specialties": {{ reviewer.specialties|tojson }},
+                        "bio": {{ reviewer.bio|tojson }}
+                    })' title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action btn-delete"
+                        onclick="deleteReviewer({{ reviewer.id }}, {{ reviewer.name|tojson }})" title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center">لا توجد محكمين بعد، قم بإضافة محكم جديد</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="reviewerModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">إضافة محكم جديد</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="reviewerForm" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="reviewer_id" id="reviewerId" value="">
+            <div class="form-group">
+                <label>الاسم الكامل <span style="color: red;">*</span></label>
+                <input type="text" name="name" id="name" required placeholder="مثال: أ.د. عبدالله احمد علي">
+            </div>
+            <div class="form-group">
+                <label>الدرجة العلمية <span style="color: red;">*</span></label>
+                <select name="degree" id="degree" required>
+                    <option value="">-- اختر الدرجة العلمية --</option>
+                    <option value="أستاذ دكتور">أستاذ دكتور</option>
+                    <option value="أستاذ مشارك دكتور">أستاذ مشارك دكتور</option>
+                    <option value="أستاذ مساعد دكتور">أستاذ مساعد دكتور</option>
+                    <option value="دكتور">دكتور</option>
+                    <option value="أستاذ">أستاذ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني <span style="color: red;">*</span></label>
+                <input type="email" name="email" id="email" required placeholder="example@tu.edu.ye">
+            </div>
+            <div class="form-group">
+                <label>رقم الجوال <span style="color: red;">*</span></label>
+                <input type="tel" name="phone" id="phone" required placeholder="+967XXXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>التخصصات العلمية (يمكن اختيار أكثر من تخصص) <span style="color: red;">*</span></label>
+                <div class="specialties-container" id="specialtiesContainer"></div>
+                <div class="add-specialty">
+                    <input type="text" id="newSpecialty" placeholder="أدخل تخصص جديد">
+                    <button type="button" onclick="addSpecialty()">إضافة</button>
+                </div>
+                <input type="hidden" name="specialties" id="specialtiesInput">
+                <small>التخصصات المتاحة: الطاقة، النانو، الأحياء، الجيولوجيا، الإحصاء، الكيمياء، الفيزياء، الرياضيات،
+                    وغيرها</small>
+            </div>
+            <div class="form-group">
+                <label>السيرة الذاتية (اختياري)</label>
+                <textarea name="bio" id="bio" rows="3" placeholder="نبذة مختصرة عن المحكم"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button type="submit" class="btn-save">حفظ</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف المحكم <strong id="deleteReviewerName"></strong>؟</p>
+        <div class="modal-buttons">
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-save" style="background: #dc2626;">نعم، حذف</button>
+            </form>
+            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var specialtiesArray = [];
+
+    function applyFilters() {
+        var specialty = document.getElementById('specialtyFilter').value;
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('#reviewersTableBody tr');
+
+        rows.forEach(function (row) {
+            var name = (row.querySelector('td:nth-child(2)')?.innerText || '').toLowerCase();
+            var email = (row.querySelector('td:nth-child(4)')?.innerText || '').toLowerCase();
+            var specialties = (row.querySelector('.specialties-container')?.innerText || '').toLowerCase();
+
+            var matchesSearch = name.includes(search) || email.includes(search);
+            var matchesSpecialty = specialty === 'all' || specialties.includes(specialty);
+
+            row.style.display = (matchesSearch && matchesSpecialty) ? '' : 'none';
+        });
+    }
+
+    function addSpecialty() {
+        var input = document.getElementById('newSpecialty');
+        var specialty = input.value.trim();
+        if (specialty && !specialtiesArray.includes(specialty)) {
+            specialtiesArray.push(specialty);
+            updateSpecialtiesDisplay();
+            input.value = '';
+        }
+    }
+
+    function removeSpecialty(index) {
+        specialtiesArray.splice(index, 1);
+        updateSpecialtiesDisplay();
+    }
+
+    function updateSpecialtiesDisplay() {
+        var container = document.getElementById('specialtiesContainer');
+        var input = document.getElementById('specialtiesInput');
+        container.innerHTML = '';
+        specialtiesArray.forEach(function (spec, idx) {
+            var tag = document.createElement('span');
+            tag.className = 'specialty-tag';
+            tag.innerHTML = spec + ' <span class="remove" onclick="removeSpecialty(' + idx + ')">&times;</span>';
+            container.appendChild(tag);
+        });
+        input.value = specialtiesArray.join(',');
+    }
+
+    function openAddModal() {
+        document.getElementById('modalTitle').innerText = 'إضافة محكم جديد';
+        document.getElementById('reviewerId').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('degree').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('bio').value = '';
+        specialtiesArray = [];
+        updateSpecialtiesDisplay();
+        document.getElementById('reviewerForm').action = "{{ url_for('admin.add_reviewer') }}";
+        document.getElementById('reviewerModal').style.display = 'flex';
+    }
+
+    function editReviewer(reviewer) {
+        document.getElementById('modalTitle').innerText = 'تعديل بيانات المحكم';
+        document.getElementById('reviewerId').value = reviewer.id;
+        document.getElementById('name').value = reviewer.name;
+        document.getElementById('degree').value = reviewer.degree;
+        document.getElementById('email').value = reviewer.email;
+        document.getElementById('phone').value = reviewer.phone;
+        document.getElementById('bio').value = reviewer.bio || '';
+        specialtiesArray = reviewer.specialties ? reviewer.specialties.split(',') : [];
+        updateSpecialtiesDisplay();
+        document.getElementById('reviewerForm').action = "{{ url_for('admin.edit_reviewer', reviewer_id=0) }}".replace('0', reviewer.id);
+        document.getElementById('reviewerModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('reviewerModal').style.display = 'none';
+    }
+
+    function deleteReviewer(id, name) {
+        document.getElementById('deleteReviewerName').innerText = name;
+        var form = document.getElementById('deleteForm');
+        form.action = "{{ url_for('admin.delete_reviewer', reviewer_id=0) }}".replace('0', id);
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+        var modal = document.getElementById('reviewerModal');
+        var deleteModal = document.getElementById('deleteModal');
+        if (event.target === modal) closeModal();
+        if (event.target === deleteModal) closeDeleteModal();
+    }
+
+    setTimeout(function () {
+        var flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(function (msg) {
+            msg.style.transition = '0.5s';
+            msg.style.opacity = '0';
+            setTimeout(function () { msg.remove(); }, 500);
+        });
+    }, 4000);
+</script>
+{% endblock %}

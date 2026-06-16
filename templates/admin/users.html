@@ -1,0 +1,630 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}إدارة المستخدمين - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: #1a4a6e;
+    }
+
+    .btn-add {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-add:hover {
+        background: #a8822a;
+        transform: translateY(-2px);
+    }
+
+    .filter-bar {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .filter-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .search-input {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        width: 250px;
+    }
+
+    .btn-reset {
+        background: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-reset:hover {
+        background: #5a6268;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        overflow-x: auto;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+    }
+
+    .custom-table th {
+        text-align: right;
+        padding: 12px 10px;
+        background: #f8f9fa;
+        color: #1a4a6e;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .custom-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+        vertical-align: middle;
+    }
+
+    .custom-table tr:hover {
+        background: #f8f9fa;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+    }
+
+    .role-admin {
+        background: #c9a03d;
+        color: white;
+    }
+
+    .role-reviewer {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .role-user {
+        background: #6c757d;
+        color: white;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: #22c55e;
+        color: white;
+    }
+
+    .status-inactive {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-action {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px 8px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+        color: #c9a03d;
+    }
+
+    .btn-edit:hover {
+        background: rgba(201, 160, 61, 0.1);
+    }
+
+    .btn-delete {
+        color: #dc2626;
+    }
+
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.1);
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1100;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        color: #1a4a6e;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #999;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-family: 'Cairo', sans-serif;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #c9a03d;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .btn-save {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .password-hint {
+        font-size: 0.7rem;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .custom-table {
+            font-size: 0.7rem;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 6px;
+        }
+
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-group {
+            justify-content: space-between;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <h2><i class="fas fa-users"></i> إدارة المستخدمين</h2>
+    <button class="btn-add" onclick="openAddModal()">
+        <i class="fas fa-plus"></i> إضافة مستخدم جديد
+    </button>
+</div>
+
+<div class="filter-bar">
+    <div class="filter-group">
+        <select id="roleFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all">جميع الأدوار</option>
+            <option value="admin">مشرفين</option>
+            <option value="reviewer">محكمين</option>
+            <option value="user">مستخدمين عاديين</option>
+        </select>
+        <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all">جميع الحالات</option>
+            <option value="active">نشط</option>
+            <option value="inactive">غير نشط</option>
+        </select>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث بالاسم أو البريد..."
+            onkeyup="applyFilters()">
+        <button class="btn-reset" onclick="resetFilters()">إعادة تعيين</button>
+    </div>
+</div>
+
+<div class="table-card">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>اسم المستخدم</th>
+                <th>البريد الإلكتروني</th>
+                <th>الجهة</th>
+                <th>الدور</th>
+                <th>الحالة</th>
+                <th>تاريخ التسجيل</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody">
+            {% for user in users %}
+            <tr data-user-id="{{ user.id }}">
+                <td>{{ loop.index }}</td>
+                <td><strong>{{ user.username }}</strong></td>
+                <td dir="ltr">{{ user.email }}</td>
+                <td>{{ user.affiliation or '-' }}</td>
+                <td>
+                    <span class="role-badge role-{{ user.role }}">
+                        {% if user.role == 'admin' %}مشرف
+                        {% elif user.role == 'reviewer' %}محكم
+                        {% else %}مستخدم
+                        {% endif %}
+                    </span>
+                </td>
+                <td>
+                    <span class="status-badge status-{{ 'active' if user.is_active else 'inactive' }}">
+                        {{ 'نشط' if user.is_active else 'غير نشط' }}
+                    </span>
+                </td>
+                <td>{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'جديد' }}</td>
+                <td>
+                    <button class="btn-action btn-edit" onclick='editUser({
+                        "id": {{ user.id }},
+                        "username": {{ user.username|tojson }},
+                        "email": {{ user.email|tojson }},
+                        "affiliation": {{ user.affiliation|tojson }},
+                        "role": {{ user.role|tojson }},
+                        "is_active": {{ user.is_active|tojson }}
+                    })' title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action btn-delete"
+                        onclick="deleteUser({{ user.id }}, {{ user.username|tojson }})" title="حذف">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button class="btn-action" onclick="toggleUserStatus({{ user.id }}, {{ user.is_active|tojson }})"
+                        title="{{ 'تعطيل' if user.is_active else 'تفعيل' }}">
+                        <i class="fas fa-{{ 'ban' if user.is_active else 'check-circle' }}"></i>
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center">لا توجد مستخدمين بعد، قم بإضافة مستخدم جديد</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Add/Edit Modal -->
+<div id="userModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">إضافة مستخدم جديد</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="userForm" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="user_id" id="userId" value="">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>اسم المستخدم <span style="color: red;">*</span></label>
+                    <input type="text" name="username" id="username" required placeholder="أدخل اسم المستخدم">
+                </div>
+                <div class="form-group">
+                    <label>البريد الإلكتروني <span style="color: red;">*</span></label>
+                    <input type="email" name="email" id="email" required placeholder="example@domain.com">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>كلمة المرور <span style="color: red;" id="passwordRequired">*</span></label>
+                    <input type="password" name="password" id="password" placeholder="أدخل كلمة المرور">
+                    <div class="password-hint" id="passwordHint">للإضافة: مطلوب | للتعديل: اتركه فارغاً إذا لم ترد
+                        تغييره</div>
+                </div>
+                <div class="form-group">
+                    <label>تأكيد كلمة المرور</label>
+                    <input type="password" name="confirm_password" id="confirmPassword"
+                        placeholder="أعد إدخال كلمة المرور">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الجهة / المؤسسة</label>
+                    <input type="text" name="affiliation" id="affiliation" placeholder="الجامعة / المؤسسة">
+                </div>
+                <div class="form-group">
+                    <label>الدور الوظيفي</label>
+                    <select name="role" id="role">
+                        <option value="user">مستخدم عادي</option>
+                        <option value="reviewer">محكم</option>
+                        <option value="admin">مشرف (أدمن)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button type="submit" class="btn-save">حفظ</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">إلغاء</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف المستخدم <strong id="deleteUserName"></strong>؟</p>
+        <p style="font-size: 0.8rem; color: #666;">سيتم حذف جميع بيانات المستخدم بشكل نهائي.</p>
+        <div class="modal-buttons">
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-save" style="background: #dc2626;">نعم، حذف</button>
+            </form>
+            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function applyFilters() {
+        var role = document.getElementById('roleFilter').value;
+        var status = document.getElementById('statusFilter').value;
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var rows = document.querySelectorAll('#usersTableBody tr');
+
+        rows.forEach(function (row) {
+            var username = (row.querySelector('td:nth-child(2)')?.innerText || '').toLowerCase();
+            var email = (row.querySelector('td:nth-child(3)')?.innerText || '').toLowerCase();
+            var userRole = row.querySelector('td:nth-child(5)')?.innerText || '';
+            var userStatus = row.querySelector('td:nth-child(6)')?.innerText || '';
+
+            var matchesSearch = username.includes(search) || email.includes(search);
+            var matchesRole = (role === 'all') ||
+                (role === 'admin' && userRole.includes('مشرف')) ||
+                (role === 'reviewer' && userRole.includes('محكم')) ||
+                (role === 'user' && userRole.includes('مستخدم'));
+            var matchesStatus = (status === 'all') ||
+                (status === 'active' && userStatus.includes('نشط')) ||
+                (status === 'inactive' && userStatus.includes('غير نشط'));
+
+            row.style.display = (matchesSearch && matchesRole && matchesStatus) ? '' : 'none';
+        });
+    }
+
+    function resetFilters() {
+        document.getElementById('roleFilter').value = 'all';
+        document.getElementById('statusFilter').value = 'all';
+        document.getElementById('searchInput').value = '';
+        applyFilters();
+    }
+
+    function openAddModal() {
+        document.getElementById('modalTitle').innerText = 'إضافة مستخدم جديد';
+        document.getElementById('userId').value = '';
+        document.getElementById('username').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('confirmPassword').value = '';
+        document.getElementById('affiliation').value = '';
+        document.getElementById('role').value = 'user';
+        document.getElementById('passwordRequired').style.display = 'inline';
+        document.getElementById('password').required = true;
+        document.getElementById('userForm').action = "{{ url_for('admin.add_user') }}";
+        document.getElementById('userModal').style.display = 'flex';
+    }
+
+    function editUser(user) {
+        document.getElementById('modalTitle').innerText = 'تعديل بيانات المستخدم';
+        document.getElementById('userId').value = user.id;
+        document.getElementById('username').value = user.username;
+        document.getElementById('email').value = user.email;
+        document.getElementById('affiliation').value = user.affiliation || '';
+        document.getElementById('role').value = user.role;
+        document.getElementById('password').value = '';
+        document.getElementById('confirmPassword').value = '';
+        document.getElementById('password').required = false;
+        document.getElementById('passwordRequired').style.display = 'none';
+        document.getElementById('userForm').action = "{{ url_for('admin.edit_user', user_id=0) }}".replace('0', user.id);
+        document.getElementById('userModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('userModal').style.display = 'none';
+    }
+
+    function deleteUser(id, name) {
+        document.getElementById('deleteUserName').innerText = name;
+        var form = document.getElementById('deleteForm');
+        form.action = "{{ url_for('admin.delete_user', user_id=0) }}".replace('0', id);
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    function toggleUserStatus(id, isActive) {
+        var action = isActive ? 'تعطيل' : 'تفعيل';
+        if (confirm('هل أنت متأكد من ' + action + ' هذا المستخدم؟')) {
+            window.location.href = "{{ url_for('admin.toggle_user_active', user_id=0) }}".replace('0', id);
+        }
+    }
+
+    window.onclick = function (event) {
+        var modal = document.getElementById('userModal');
+        var deleteModal = document.getElementById('deleteModal');
+        if (event.target === modal) closeModal();
+        if (event.target === deleteModal) closeDeleteModal();
+    }
+
+    // Password confirmation validation
+    document.getElementById('userForm').addEventListener('submit', function (e) {
+        var password = document.getElementById('password').value;
+        var confirm = document.getElementById('confirmPassword').value;
+        var userId = document.getElementById('userId').value;
+
+        if (!userId && !password) {
+            e.preventDefault();
+            alert('الرجاء إدخال كلمة المرور للمستخدم الجديد');
+            return false;
+        }
+
+        if (password && password !== confirm) {
+            e.preventDefault();
+            alert('كلمة المرور وتأكيدها غير متطابقين');
+            return false;
+        }
+
+        if (password && password.length < 6) {
+            e.preventDefault();
+            alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+            return false;
+        }
+    });
+
+    setTimeout(function () {
+        var flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(function (msg) {
+            msg.style.transition = '0.5s';
+            msg.style.opacity = '0';
+            setTimeout(function () { msg.remove(); }, 500);
+        });
+    }, 4000);
+</script>
+{% endblock %}

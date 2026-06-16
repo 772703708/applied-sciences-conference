@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}تعديل الملف الشخصي - المؤتمر العلمي الدولي الأول{% endblock %}
+
+{% block content %}
+<style>
+    .edit-profile-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 40px 20px;
+    }
+    .edit-card {
+        background: var(--bg-light);
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+        border: 1px solid var(--border-color);
+    }
+    .edit-card h2 {
+        margin-bottom: 25px;
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--secondary-color);
+        padding-bottom: 15px;
+        display: inline-block;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text-color);
+    }
+    .form-group .required {
+        color: #e74c3c;
+        margin-right: 3px;
+    }
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #cbd5e0 !important;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        transition: all 0.25s ease;
+        background: var(--bg-light);
+        color: var(--text-color);
+        font-family: 'Cairo', sans-serif;
+    }
+    .form-control:focus {
+        border-color: var(--secondary-color) !important;
+        outline: none;
+        animation: glowPulse 1.2s infinite;
+    }
+    @keyframes glowPulse {
+        0% { border-color: var(--secondary-color) !important; box-shadow: 0 0 0 0 rgba(201,160,61,0.2); }
+        50% { border-color: var(--secondary-light) !important; box-shadow: 0 0 0 4px rgba(201,160,61,0.1); }
+        100% { border-color: var(--secondary-color) !important; box-shadow: 0 0 0 0 rgba(201,160,61,0); }
+    }
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+    .btn-save {
+        background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+        color: var(--primary-dark);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(201,160,61,0.3);
+    }
+    .btn-cancel {
+        background: var(--bg-gray);
+        color: var(--text-color);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-cancel:hover {
+        background: var(--border-color);
+    }
+    @media (max-width: 768px) {
+        .edit-card {
+            padding: 20px;
+        }
+        .form-actions {
+            flex-direction: column;
+        }
+        .form-actions .btn-save, .form-actions .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="edit-profile-container">
+    <div class="edit-card">
+        <h2><i class="fas fa-user-edit"></i> تعديل الملف الشخصي</h2>
+        
+        <form method="POST" action="{{ url_for('auth.edit_profile') }}">
+            {{ form.csrf_token }}
+            
+            <div class="form-group">
+                <label>اسم المستخدم <span class="required">*</span></label>
+                {{ form.username(class="form-control", placeholder="أدخل اسم المستخدم") }}
+                {% if form.username.errors %}
+                    <small class="text-danger">{{ form.username.errors[0] }}</small>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label>الجهة التابع لها</label>
+                {{ form.affiliation(class="form-control", placeholder="الجامعة / المؤسسة") }}
+            </div>
+            
+            <div class="form-group">
+                <label>رقم الجوال</label>
+                {{ form.phone(class="form-control", placeholder="+967XXXXXXXXX") }}
+            </div>
+            
+            <div class="form-group">
+                <label>السيرة الذاتية</label>
+                {{ form.bio(class="form-control", rows="4", placeholder="نبذة عنك وخبراتك العلمية") }}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-save"></i> حفظ التغييرات
+                </button>
+                <a href="{{ url_for('auth.profile') }}" class="btn-cancel">
+                    <i class="fas fa-times"></i> إلغاء
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,321 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}الإعدادات - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    .settings-container {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+    .settings-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .settings-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+        color: #1a4a6e;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #c9a03d;
+        display: inline-block;
+    }
+    .settings-card h3 i {
+        margin-left: 8px;
+        color: #c9a03d;
+    }
+    .form-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
+    .form-group {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #333;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-family: 'Cairo', sans-serif;
+        transition: all 0.3s ease;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        outline: none;
+        border-color: #c9a03d;
+        box-shadow: 0 0 0 3px rgba(201,160,61,0.1);
+    }
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .checkbox-group input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #c9a03d;
+    }
+    .checkbox-group label {
+        margin: 0;
+        cursor: pointer;
+    }
+    .color-preview {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        margin-top: 5px;
+    }
+    .form-divider {
+        height: 1px;
+        background: #e0e0e0;
+        margin: 20px 0;
+    }
+    .btn-save {
+        background: #c9a03d;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-save:hover {
+        background: #a8822a;
+        transform: translateY(-2px);
+    }
+    .btn-reset {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 10px;
+    }
+    .btn-reset:hover {
+        background: #5a6268;
+    }
+    .settings-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+    @media (max-width: 768px) {
+        .settings-card {
+            padding: 20px;
+        }
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        .settings-actions {
+            flex-direction: column;
+        }
+        .btn-save, .btn-reset {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="settings-container">
+    <form method="POST" action="{{ url_for('admin.settings') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        <!-- معلومات الموقع -->
+        <div class="settings-card">
+            <h3><i class="fas fa-globe"></i> معلومات الموقع</h3>
+            <div class="form-group">
+                <label>اسم الموقع</label>
+                {{ form.site_name(class="form-control", placeholder="اسم الموقع") }}
+            </div>
+            <div class="form-group">
+                <label>وصف الموقع</label>
+                {{ form.site_description(class="form-control", rows="3", placeholder="وصف الموقع") }}
+            </div>
+            <div class="form-group">
+                <label>الكلمات المفتاحية (SEO)</label>
+                {{ form.meta_keywords(class="form-control", placeholder="مؤتمر, علوم تطبيقية, تنمية مستدامة") }}
+            </div>
+        </div>
+        
+        <!-- معلومات المؤتمر -->
+        <div class="settings-card">
+            <h3><i class="fas fa-calendar-alt"></i> معلومات المؤتمر</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>تواريخ المؤتمر</label>
+                    {{ form.conference_dates(class="form-control", placeholder="23-25 يونيو 2026") }}
+                </div>
+                <div class="form-group">
+                    <label>مكان الانعقاد</label>
+                    {{ form.conference_venue(class="form-control", placeholder="كلية العلوم التطبيقية - جامعة ذمار") }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>آخر موعد للتسجيل</label>
+                    {{ form.registration_deadline(class="form-control", placeholder="2026-06-01") }}
+                </div>
+                <div class="form-group">
+                    <label>آخر موعد لتقديم الأبحاث</label>
+                    {{ form.submission_deadline(class="form-control", placeholder="2026-05-01") }}
+                </div>
+                <div class="form-group">
+                    <label>آخر موعد للخصم المبكر</label>
+                    {{ form.early_bird_deadline(class="form-control", placeholder="2026-04-01") }}
+                </div>
+            </div>
+            <div class="checkbox-group">
+                {{ form.registration_open() }}
+                <label>التسجيل مفتوح</label>
+            </div>
+            <div class="checkbox-group">
+                {{ form.submission_open() }}
+                <label>تقديم الأبحاث مفتوح</label>
+            </div>
+        </div>
+        
+        <!-- معلومات الاتصال -->
+        <div class="settings-card">
+            <h3><i class="fas fa-envelope"></i> معلومات الاتصال</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>البريد الإلكتروني للتواصل</label>
+                    {{ form.contact_email(class="form-control", placeholder="info@conference.com") }}
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    {{ form.contact_phone(class="form-control", placeholder="+967XXXXXXXXX") }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>رقم واتساب</label>
+                {{ form.whatsapp_number(class="form-control", placeholder="967XXXXXXXXX") }}
+            </div>
+            <div class="form-group">
+                <label>العنوان (كامل)</label>
+                {{ form.address(class="form-control", rows="2", placeholder="كلية العلوم التطبيقية - جامعة ذمار - اليمن") }}
+            </div>
+        </div>
+        
+        <!-- روابط التواصل الاجتماعي -->
+        <div class="settings-card">
+            <h3><i class="fas fa-share-alt"></i> روابط التواصل الاجتماعي</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fab fa-facebook-f"></i> فيسبوك</label>
+                    {{ form.facebook_url(class="form-control", placeholder="https://facebook.com/...") }}
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-twitter"></i> تويتر</label>
+                    {{ form.twitter_url(class="form-control", placeholder="https://twitter.com/...") }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fab fa-linkedin-in"></i> لينكدإن</label>
+                    {{ form.linkedin_url(class="form-control", placeholder="https://linkedin.com/...") }}
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-youtube"></i> يوتيوب</label>
+                    {{ form.youtube_url(class="form-control", placeholder="https://youtube.com/...") }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- إعدادات المظهر -->
+        <div class="settings-card">
+            <h3><i class="fas fa-palette"></i> إعدادات المظهر</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>اللون الأساسي</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        {{ form.primary_color(class="form-control", style="flex:1;", placeholder="#1a4a6e") }}
+                        <div class="color-preview" style="background-color: {{ form.primary_color.data or '#1a4a6e' }};"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="checkbox-group">
+                {{ form.dark_mode_default() }}
+                <label>الوضع المظلم افتراضياً</label>
+            </div>
+            <div class="checkbox-group">
+                {{ form.rtl_default() }}
+                <label>الاتجاه من اليمين لليسار (RTL) افتراضياً</label>
+            </div>
+        </div>
+        
+        <!-- تحليلات جوجل -->
+        <div class="settings-card">
+            <h3><i class="fas fa-chart-line"></i> التحليلات والإحصائيات</h3>
+            <div class="form-group">
+                <label>Google Analytics ID</label>
+                {{ form.google_analytics_id(class="form-control", placeholder="G-XXXXXXXXXX") }}
+                <small class="text-muted">أدخل معرف Google Analytics لتتبع زوار الموقع</small>
+            </div>
+        </div>
+        
+        <!-- أزرار الحفظ -->
+        <div class="settings-actions">
+            <button type="reset" class="btn-reset" onclick="return confirm('هل أنت متأكد من إعادة تعيين جميع الحقول؟')">
+                <i class="fas fa-undo-alt"></i> إعادة تعيين
+            </button>
+            <button type="submit" class="btn-save">
+                <i class="fas fa-save"></i> حفظ الإعدادات
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Update color preview when color input changes
+    var colorInput = document.querySelector('input[name="primary_color"]');
+    var colorPreview = document.querySelector('.color-preview');
+    
+    if (colorInput && colorPreview) {
+        colorInput.addEventListener('input', function() {
+            colorPreview.style.backgroundColor = this.value;
+        });
+    }
+    
+    // Confirm reset
+    document.querySelector('.btn-reset').addEventListener('click', function(e) {
+        if (!confirm('هل أنت متأكد من إعادة تعيين جميع الحقول؟')) {
+            e.preventDefault();
+        }
+    });
+</script>
+{% endblock %}

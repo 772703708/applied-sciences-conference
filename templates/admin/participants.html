@@ -1,0 +1,509 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}إدارة المشاركين - المؤتمر العلمي{% endblock %}
+
+{% block content %}
+<style>
+    /* Filter Bar */
+    .filter-bar {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .filter-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-select {
+        padding: 8px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #c9a03d;
+    }
+
+    .btn-reset {
+        padding: 8px 16px;
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-reset:hover {
+        background: #5a6268;
+    }
+
+    /* Stats Cards */
+    .stats-mini {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .stat-mini-card {
+        background: white;
+        border-radius: 12px;
+        padding: 10px 15px;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stat-mini-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .stat-mini-number {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a4a6e;
+    }
+
+    .stat-mini-label {
+        font-size: 0.65rem;
+        color: #666;
+    }
+
+    /* Table */
+    .table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 15px;
+        margin-top: 20px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .table-header h3 {
+        font-size: 1rem;
+        margin: 0;
+        color: #1a4a6e;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.8rem;
+    }
+
+    .custom-table th {
+        text-align: right;
+        padding: 10px;
+        background: #f8f9fa;
+        color: #1a4a6e;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .custom-table td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+        vertical-align: middle;
+    }
+
+    .custom-table tr:hover {
+        background: #f8f9fa;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+    }
+
+    .status-pending { background: #fef3c7; color: #d97706; }
+    .status-under_review { background: #dbeafe; color: #2563eb; }
+    .status-accepted { background: #d1fae5; color: #059669; }
+    .status-rejected { background: #fee2e2; color: #dc2626; }
+    .status-revision_required { background: #fed7aa; color: #ea580c; }
+
+    .drive-link {
+        color: #c9a03d;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    .drive-link:hover {
+        color: #a8822a;
+    }
+
+    .btn-action {
+        background: none;
+        border: none;
+        color: #c9a03d;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 5px;
+        margin: 0 3px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-action:hover {
+        background: rgba(201, 160, 61, 0.1);
+        color: #a8822a;
+    }
+
+    .btn-delete {
+        color: #dc2626;
+    }
+
+    .btn-delete:hover {
+        background: rgba(220, 38, 38, 0.1);
+        color: #dc2626;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .pagination a, .pagination span {
+        padding: 6px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #1a4a6e;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .pagination a:hover {
+        background: #c9a03d;
+        color: white;
+        border-color: #c9a03d;
+    }
+
+    .pagination .active {
+        background: #c9a03d;
+        color: white;
+        border-color: #c9a03d;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1100;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .modal-btn {
+        padding: 8px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+
+    .modal-btn-confirm {
+        background: #dc2626;
+        color: white;
+    }
+
+    .modal-btn-cancel {
+        background: #e0e0e0;
+        color: #333;
+    }
+
+    @media (max-width: 768px) {
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .filter-group {
+            justify-content: space-between;
+        }
+        
+        .custom-table {
+            font-size: 0.7rem;
+        }
+        
+        .custom-table th,
+        .custom-table td {
+            padding: 6px;
+        }
+        
+        .btn-action {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+    <div class="filter-group">
+        <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>جميع الحالات</option>
+            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>قيد الانتظار</option>
+            <option value="under_review" {% if status_filter == 'under_review' %}selected{% endif %}>قيد المراجعة</option>
+            <option value="accepted" {% if status_filter == 'accepted' %}selected{% endif %}>مقبول</option>
+            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>مرفوض</option>
+            <option value="revision_required" {% if status_filter == 'revision_required' %}selected{% endif %}>تعديلات مطلوبة</option>
+        </select>
+        
+        <select id="trackFilter" class="filter-select" onchange="applyFilters()">
+            <option value="all" {% if track_filter == 'all' %}selected{% endif %}>جميع التخصصات</option>
+            <option value="energy" {% if track_filter == 'energy' %}selected{% endif %}>الطاقة المستدامة</option>
+            <option value="nanotechnology" {% if track_filter == 'nanotechnology' %}selected{% endif %}>علم المواد والنانو</option>
+            <option value="biology" {% if track_filter == 'biology' %}selected{% endif %}>العلوم البيولوجية</option>
+            <option value="geology" {% if track_filter == 'geology' %}selected{% endif %}>الجيولوجيا والبيئة</option>
+            <option value="statistics" {% if track_filter == 'statistics' %}selected{% endif %}>الإحصاء والنمذجة</option>
+            <option value="chemistry" {% if track_filter == 'chemistry' %}selected{% endif %}>الكيمياء التطبيقية</option>
+        </select>
+    </div>
+    
+    <div class="stats-mini">
+        <div class="stat-mini-card">
+            <div class="stat-mini-icon blue"><i class="fas fa-file-alt"></i></div>
+            <div>
+                <div class="stat-mini-number">{{ status_counts.all }}</div>
+                <div class="stat-mini-label">إجمالي</div>
+            </div>
+        </div>
+        <div class="stat-mini-card">
+            <div class="stat-mini-icon orange"><i class="fas fa-clock"></i></div>
+            <div>
+                <div class="stat-mini-number">{{ status_counts.pending }}</div>
+                <div class="stat-mini-label">قيد الانتظار</div>
+            </div>
+        </div>
+        <div class="stat-mini-card">
+            <div class="stat-mini-icon blue"><i class="fas fa-eye"></i></div>
+            <div>
+                <div class="stat-mini-number">{{ status_counts.under_review }}</div>
+                <div class="stat-mini-label">قيد المراجعة</div>
+            </div>
+        </div>
+        <div class="stat-mini-card">
+            <div class="stat-mini-icon green"><i class="fas fa-check-circle"></i></div>
+            <div>
+                <div class="stat-mini-number">{{ status_counts.accepted }}</div>
+                <div class="stat-mini-label">مقبول</div>
+            </div>
+        </div>
+    </div>
+    
+    <a href="{{ url_for('admin.participants') }}" class="btn-reset">إعادة تعيين</a>
+</div>
+
+<!-- Participants Table -->
+<div class="table-card">
+    <div class="table-header">
+        <h3><i class="fas fa-users"></i> قائمة المشاركين</h3>
+        <span>إجمالي {{ participants.total }} مشارك</span>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>رقم التتبع</th>
+                    <th>الباحث الرئيسي</th>
+                    <th>عنوان البحث</th>
+                    <th>التخصص</th>
+                    <th>الحالة</th>
+                    <th>تاريخ التقديم</th>
+                    <th>الملف</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in participants.items %}
+                <tr>
+                    <td><code>{{ participant.tracking_id }}</code></td>
+                    <td>{{ participant.main_author_name }}</td>
+                    <td>{{ participant.title[:35] }}{% if participant.title|length > 35 %}...{% endif %}</td>
+                    <td>{{ participant.track }}</td>
+                    <td>
+                        <span class="status-badge status-{{ participant.status }}">
+                            {% if participant.status == 'pending' %}قيد الانتظار
+                            {% elif participant.status == 'under_review' %}قيد المراجعة
+                            {% elif participant.status == 'accepted' %}مقبول
+                            {% elif participant.status == 'rejected' %}مرفوض
+                            {% elif participant.status == 'revision_required' %}تعديلات مطلوبة
+                            {% else %}{{ participant.status }}
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>{{ participant.submitted_at.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {% if participant.gdrive_view_link %}
+                        <a href="{{ participant.gdrive_view_link }}" target="_blank" class="drive-link" title="فتح الملف">
+                            <i class="fab fa-google-drive"></i>
+                        </a>
+                        {% else %}
+                        <i class="fas fa-file-pdf" style="color: #999;"></i>
+                        {% endif %}
+                     </td>
+                    <td>
+                        <a href="{{ url_for('admin.view_participant', participant_id=participant.id) }}" class="btn-action" title="عرض التفاصيل">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <button onclick="showDeleteModal({{ participant.id }}, '{{ participant.tracking_id }}')" class="btn-action btn-delete" title="حذف">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                     </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="text-center">لا توجد مشاركات بعد</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if participants.pages > 1 %}
+    <div class="pagination">
+        {% if participants.has_prev %}
+            <a href="{{ url_for('admin.participants', page=participants.prev_num, status=status_filter, track=track_filter) }}">&laquo; السابق</a>
+        {% endif %}
+        
+        {% for page_num in participants.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+            {% if page_num %}
+                {% if page_num == participants.page %}
+                    <span class="active">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('admin.participants', page=page_num, status=status_filter, track=track_filter) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if participants.has_next %}
+            <a href="{{ url_for('admin.participants', page=participants.next_num, status=status_filter, track=track_filter) }}">التالي &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #dc2626; margin-bottom: 15px;"></i>
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف المشارك <strong id="deleteTrackingId"></strong>؟</p>
+        <p style="font-size: 0.8rem; color: #666;">سيتم حذف جميع بياناته بشكل نهائي.</p>
+        <form id="deleteForm" method="POST" action="">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="modal-buttons">
+                <button type="submit" class="modal-btn modal-btn-confirm">نعم، حذف</button>
+                <button type="button" class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">إلغاء</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Filter functions
+    function applyFilters() {
+        var status = document.getElementById('statusFilter').value;
+        var track = document.getElementById('trackFilter').value;
+        var url = "{{ url_for('admin.participants') }}?status=" + status + "&track=" + track;
+        window.location.href = url;
+    }
+    
+    // Delete modal functions
+    function showDeleteModal(participantId, trackingId) {
+        var modal = document.getElementById('deleteModal');
+        var form = document.getElementById('deleteForm');
+        var trackingSpan = document.getElementById('deleteTrackingId');
+        
+        trackingSpan.textContent = trackingId;
+        form.action = "{{ url_for('admin.delete_participant', participant_id=0) }}".replace('0', participantId);
+        modal.style.display = 'flex';
+    }
+    
+    function closeDeleteModal() {
+        var modal = document.getElementById('deleteModal');
+        modal.style.display = 'none';
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        var modal = document.getElementById('deleteModal');
+        if (event.target === modal) {
+            closeDeleteModal();
+        }
+    }
+    
+    // Auto hide flash messages
+    setTimeout(function() {
+        var flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(function(msg) {
+            msg.style.transition = '0.5s';
+            msg.style.opacity = '0';
+            setTimeout(function() { msg.remove(); }, 500);
+        });
+    }, 4000);
+</script>
+{% endblock %}
