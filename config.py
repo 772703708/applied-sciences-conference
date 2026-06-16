@@ -7,19 +7,25 @@ class Config:
     # Flask
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
     
-    # Database
+    # Database - استخدم PostgreSQL في الإنتاج
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(BASEDIR, "instance", "conference.db")}'
+    
+    if os.environ.get('DATABASE_URL'):
+        # Render يوفر DATABASE_URL تلقائياً
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
+    else:
+        SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(BASEDIR, "instance", "conference.db")}'
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
-    # Uploads (محلي - سيتم استبداله بـ Google Drive)
+    # Uploads
     UPLOAD_FOLDER = os.path.join(BASEDIR, 'uploads')
     MAX_CONTENT_LENGTH = 25 * 1024 * 1024  # 25MB
     ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
     ALLOWED_IMAGES = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
     
     # Session
-    SESSION_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = True  # تغيير إلى True في الإنتاج
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
     USE_GOOGLE_DRIVE = True
@@ -43,10 +49,9 @@ class Config:
     # ========================================
     # Google Drive OAuth Configuration
     # ========================================
-    # تم إزالة GOOGLE_APPLICATION_CREDENTIALS لأننا نستخدم OAuth الآن
-    # سيتم استخدام client_secret.json و token.json بدلاً من ذلك
+    # سيتم استخدام client_secret.json و token.json
     
-    # Google Drive Folder IDs (نفسها بدون تغيير)
+    # Google Drive Folder IDs
     DRIVE_FOLDER_IDS = {
         'root': os.environ.get('DRIVE_ROOT_ID', '1P9PuMaHKg1h_kLj9y1dupCzcTApLESg4'),
         'papers_root': os.environ.get('DRIVE_PAPERS_ROOT', '19FyF9giN_4SBeKeWIn5NlT29ABtkUFro'),
@@ -71,7 +76,6 @@ class Config:
         'chemistry': DRIVE_FOLDER_IDS['chemistry'],
     }
     
-    # Available tracks for submission
     TRACK_CHOICES = [
         ('energy', 'الطاقة المستدامة والطاقة المتجددة'),
         ('nanotechnology', 'علم المواد المتقدمة وتكنولوجيا النانو'),
@@ -81,7 +85,6 @@ class Config:
         ('chemistry', 'الكيمياء وتطبيقاتها التكنولوجية'),
     ]
     
-    # Submission types
     SUBMISSION_TYPE_CHOICES = [
         ('paper', 'بحث علمي كامل'),
         ('poster', 'ملصق علمي'),
